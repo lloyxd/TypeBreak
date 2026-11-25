@@ -2,7 +2,7 @@
  * Progress page — trends, finger breakdown, lesson completion history.
  */
 
-import { h, section, card, barRow, pill, empty, dataTable, lineChart, sparkline, accuracyLabel, trendLabel, duration, relativeTime } from '../dom.js';
+import { h, section, card, barRow, pill, empty, dataTable, lineChart, sparkline, accuracyLabel, duration, relativeTime } from '../dom.js';
 import { client as api } from '../client.js';
 import { pageHead, shortDate } from './shared.js';
 import { statsStrip } from '../dom.js';
@@ -23,8 +23,8 @@ export async function progressPage() {
     { label: 'Accuracy', value: stats.attempts ? `${stats.accuracy}%` : '—' },
     { label: 'Practice time', value: stats.practiceLabel },
     { label: 'Exercises', value: String(stats.attempts) },
-    { label: 'Streak', value: `${stats.streak.current}d`, sub: `best ${stats.streak.best}` },
-    { label: 'Overall', value: `${stats.overallPercent}%`, sub: `${stats.lessonsPassed}/${stats.lessonsTotal} lessons` },
+    { label: 'Streak', value: `${stats.streak.current}d`, sub: `best ${stats.streak.best}`, tone: 'gold' },
+    { label: 'Overall', value: `${stats.overallPercent}%`, sub: `${stats.lessonsPassed}/${stats.lessonsTotal} lessons`, tone: 'gold' },
   ]);
 
   /* --- trend chart --- */
@@ -33,7 +33,7 @@ export async function progressPage() {
     ? lineChart({
         series: [
           { name: 'Accuracy (%)', color: 'var(--green)', points: history.days.map((d) => (d.attempts ? d.accuracy : null)) },
-          { name: 'WPM', color: 'var(--accent)', points: history.days.map((d) => (d.attempts ? d.wpm : null)) },
+          { name: 'WPM', color: 'var(--cyan)', points: history.days.map((d) => (d.attempts ? d.wpm : null)) },
         ],
         labels: history.days.map((d) => shortDate(d.date)),
         yLabel: 'Value',
@@ -57,19 +57,11 @@ export async function progressPage() {
   const fingerCard = h(
     'div.card',
     null,
-    h('h2', null, 'Finger proficiency'),
-    h('p.faint', { style: { fontSize: '11.5px', margin: '0 0 12px' } },
+    h('h2', null, 'Finger mastery'),
+    h('p.faint', { style: { fontSize: '11.5px', margin: '0 0 14px' } },
       'Character-level accuracy per finger. Proficiency is accuracy weighted by how much evidence exists.'),
     practisedFingers.length
-      ? practisedFingers.map((finger) =>
-          h('div', { style: { padding: '4px 0' } },
-            barRow(finger.label, finger.accuracy ?? 0, { hint: `${finger.correct}/${finger.total} characters` }),
-            h('div', { style: { display: 'flex', justifyContent: 'space-between', fontSize: '10.5px', color: 'var(--text-faint)', paddingLeft: '120px' } },
-              h('span', null, `${finger.total} chars · ${finger.attempts} attempts`),
-              trendLabel(finger.trend),
-            ),
-          ),
-        )
+      ? fingerSkillGrid(practisedFingers)
       : empty('No finger data yet.'),
   );
 
@@ -160,4 +152,54 @@ export async function progressPage() {
     section('Activity', h('div.grid.grid-2', null, activity, card(h('h2', null, 'Daily detail'), dailyTable))),
     section('Lessons', lessonsCard),
   ];
+}
+
+/**
+ * A skill-tree style grid of finger mastery.
+ *
+ * Each finger gets a stat tile with an accuracy ring, so the whole hand reads at a
+ * glance — which is the point of finger-level analytics. Colour tiers match the
+ * rest of the game language: gold for mastered, green for solid, rose for a
+ * weakness that needs work.
+ */
+function fingerSkillGrid(fingers) {
+  const tierOf = (accuracy) => {
+    if (accuracy === null || accuracy === undefined) return { id: 'none', label: 'No data' };
+    if (accuracy >= 96) return { id: 'master', label: 'Mastered' };
+    if (accuracy >= 92) return { id: 'solid', label: 'Solid' };
+    if (accuracy >= 86) return { id: 'developing', label: 'Developing' };
+    return { id: 'weak', label: 'Needs work' };
+  };
+
+  const tile = (finger) => {
+    const accuracy = finger.accuracy ?? 0;
+    const tier = tierOf(finger.accuracy);
+    const r = 26;
+    const circumference = 2 * Math.PI * r;
+    const dash = (accuracy / 100) * circumference;
+
+    const ring = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    ring.setAttribute('viewBox', '0 0 64 64');
+    ring.setAttribute('class', `finger-ring tier-${tier.id}`);
+    ring.innerHTML = `
+      <circle cx="32" cy="32" r="${r}" class="ring-track" />
+      <circle cx="32" cy="32" r="${r}" class="ring-value"
+        stroke-dasharray="${dash.toFixed(1)} ${circumference.toFixed(1)}"
+        transform="rotate(-90 32 32)" />
+    `;
+
+    return h(
+      'div.finger-tile',
+      { title: `${finger.label}: ${finger.correct}/${finger.total} characters correct` },
+      h('div.finger-ring-wrap', null,
+        ring,
+        h('span.finger-ring-label', null, finger.accuracy === null ? '—' : `${Math.round(accuracy)}`),
+      ),
+      h('div.finger-name', null, finger.label),
+      h(`div.finger-tier.tier-${tier.id}`, null, tier.label),
+      h('div.finger-sub', null, `${finger.total} chars`),
+    );
+  };
+
+  return h('div.finger-grid', null, fingers.map(tile));
 }

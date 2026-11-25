@@ -10,6 +10,8 @@ import { route, setNotFound, startRouter, currentPath } from './router.js';
 import { h } from './dom.js';
 import { pageHead } from './pages/shared.js';
 import { bootService, storageAvailable, storageError } from './core/context.js';
+import { createScene } from './ui/scene.js';
+import { createEffects } from './ui/effects.js';
 import { dashboardPage } from './pages/dashboard.js';
 import { lessonsPage, lessonPage } from './pages/lessons.js';
 import { practicePage } from './pages/practice.js';
@@ -17,6 +19,22 @@ import { progressPage } from './pages/progress.js';
 import { adaptivePage } from './pages/adaptive.js';
 import { settingsPage } from './pages/settings.js';
 import { registerServiceWorker } from './pwa.js';
+
+/** Respect the OS "reduce motion" setting for the scene and the effects. */
+const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+
+let effects = null;
+
+/**
+ * The effects layer, created once.
+ *
+ * The practice page calls this to fire sparkles at the exact character it just
+ * typed. It lives at app level rather than in the page because the particle
+ * canvas must survive re-renders and sit above every panel.
+ */
+export function getEffects() {
+  return effects;
+}
 
 /* ---------------- navigation ---------------- */
 
@@ -40,7 +58,7 @@ async function refreshSidebar() {
   const accEl = document.getElementById('sidebar-accuracy');
   const saveEl = document.getElementById('sidebar-save');
 
-  if (streakEl) streakEl.textContent = `${stats.streak.current}-day streak`;
+  if (streakEl) streakEl.textContent = stats.streak.current > 0 ? `🔥 ${stats.streak.current}-day streak` : 'No streak yet';
   if (accEl) accEl.textContent = stats.attempts ? `${stats.accuracy}% accuracy · ${stats.wpm} WPM` : 'No practice yet';
   if (saveEl) {
     saveEl.textContent = storageAvailable() ? 'Saved in this browser' : 'Not saved — storage blocked';
@@ -74,6 +92,10 @@ async function boot() {
     fatal('The lesson library or local database could not be loaded.', error);
     return;
   }
+
+  // Atmosphere first, so it is painted before any panel appears.
+  createScene(document.getElementById('scene'), { reducedMotion });
+  effects = createEffects(document.body, { reducedMotion });
 
   route('/', dashboardPage);
   route('/lessons', lessonsPage);

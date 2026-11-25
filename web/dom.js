@@ -93,12 +93,12 @@ export function pill(text, variant = '') {
   return h(`span.pill${variant ? `.${variant}` : ''}`, null, text);
 }
 
-export function statCard(label, value, sub = null) {
-  return h('div.stat', null, h('div.stat-label', null, label), h('div.stat-value', null, value), sub ? h('div.stat-sub', null, sub) : null);
+export function statCard(label, value, sub = null, tone = null) {
+  return h('div.stat', null, h('div.stat-label', null, label), h(`div.stat-value${tone ? `.${tone}` : ''}`, null, value), sub ? h('div.stat-sub', null, sub) : null);
 }
 
 export function statsStrip(items) {
-  return h('div.stats-strip', null, items.map((item) => statCard(item.label, item.value, item.sub)));
+  return h('div.stats-strip', null, items.map((item) => statCard(item.label, item.value, item.sub, item.tone)));
 }
 
 export function card(...children) {

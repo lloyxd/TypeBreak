@@ -13,6 +13,8 @@ import { h, mount, clear } from '../dom.js';
 import { client as api } from '../client.js';
 import { navigate } from '../router.js';
 import { pageHead, errorBox, toast } from './shared.js';
+import { ComboTracker } from '../ui/effects.js';
+import { getEffects } from '../app.js';
 
 const KEYBOARD_ROWS = [
   ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
@@ -126,6 +128,39 @@ function buildPracticeView(payload, ctx) {
     }
   }
 
+  /**
+   * Repaint only the characters that changed.
+   *
+   * A full repaint on every keystroke would restart the caret's pulse animation
+   * and drop the pop animation below, so we walk the segments and update just the
+   * spans whose index is affected. `paintText` is still used for a fresh render.
+   */
+  function paintCharacters(indices) {
+    const targets = new Set(indices.filter((i) => i >= 0));
+    if (!targets.size) return;
+
+    const spans = textEl.children;
+    let index = 0;
+    for (const segment of state.segments) {
+      for (const ch of segment.text) {
+        if (targets.has(index)) {
+          const span = spans[index];
+          if (span) {
+            span.className = `ch ${segment.state}`;
+            span.textContent = ch === ' ' ? '\u00a0' : ch;
+            if (segment.state === 'correct') {
+              // Re-trigger the pop on repeat hits at the same index.
+              span.classList.remove('pop');
+              void span.offsetWidth;
+              span.classList.add('pop');
+            }
+          }
+        }
+        index += 1;
+      }
+    }
+  }
+
   /* ---------- HUD ---------- */
 
   const hudValues = {
@@ -148,6 +183,45 @@ function buildPracticeView(payload, ctx) {
 
   function hudCell(label, valueEl) {
     return h('div.hud-cell', null, h('div.hud-label', null, label), valueEl);
+  }
+
+  /** Briefly scale a HUD figure so a change is felt, not just read. */
+  function bump(el) {
+    el.classList.remove('bump');
+    void el.offsetWidth;
+    el.classList.add('bump');
+  }
+
+  /* ---------- combo meter ---------- */
+
+  const comboTracker = new ComboTracker({ tierSize: 10 });
+  const comboFlames = h('span.combo-flames');
+  const comboLabel = h('span.combo-label', null, 'Start typing to build a combo');
+  const comboMeter = h('div.combo-meter', null, comboFlames, comboLabel);
+
+  /**
+   * Paint the combo meter.
+   *
+   * The visual escalates with the run length — more flames, then a hot colour —
+   * because the escalating reward is what makes a streak feel worth protecting.
+   */
+  function paintCombo() {
+    const count = comboTracker.count;
+    if (count === 0) {
+      comboFlames.textContent = '';
+      comboFlames.classList.remove('hot');
+      comboLabel.classList.remove('hot');
+      comboLabel.textContent = comboTracker.best > 0 ? `Best combo this exercise: ${comboTracker.best}` : 'Start typing to build a combo';
+      return;
+    }
+
+    const flames = '🔥'.repeat(Math.min(5, 1 + Math.floor(count / 8)));
+    comboFlames.textContent = flames;
+    const hot = count >= 20;
+    comboFlames.classList.toggle('hot', hot);
+    comboLabel.classList.toggle('hot', hot);
+    comboLabel.textContent = `Combo ×${count}`;
+    surface.style.setProperty('--combo-glow', String(Math.min(1, 0.4 + count / 60)));
   }
 
   /* ---------- finger hint ---------- */
@@ -283,27 +357,48 @@ function buildPracticeView(payload, ctx) {
     hudValues.wpm.textContent = String(state.stats.wpm ?? 0);
     const acc = state.stats.accuracy ?? 100;
     hudValues.accuracy.textContent = `${acc}%`;
-    hudValues.accuracy.style.color = acc >= 96 ? 'var(--green)' : acc >= 92 ? 'var(--yellow)' : 'var(--red)';
+    hudValues.accuracy.style.color = acc >= 96 ? 'var(--green)' : acc >= 92 ? 'var(--gold)' : 'var(--red)';
     hudValues.errors.textContent = String(state.stats.errors ?? 0);
     hudValues.progress.textContent = `${state.position}/${state.total}`;
     if (state.startedAt) hudValues.time.textContent = formatClock(Date.now() - state.startedAt);
   }
 
-  /** Send one keystroke and apply the result. */
+  /** Send one keystroke and apply the result, with game feedback attached. */
   async function sendKey(key) {
     if (state.busy || state.finished) return;
     state.busy = true;
     try {
       const result = await api.press(key);
       if (state.startedAt === null) state.startedAt = Date.now();
+
+      const previousPosition = state.position;
       state.segments = result.segments;
       state.stats = result.stats;
       state.position = result.progress.position;
 
-      paintText();
+      // The span under the caret is the one that just changed.
+      const span = textEl.children[Math.min(previousPosition, textEl.children.length - 1)];
+      const fx = getEffects();
+
+      if (result.correct) {
+        const { tierUp, count } = comboTracker.hit();
+        paintCharacters([previousPosition, state.position]);
+        fx?.correct(span, count);
+        if (tierUp) {
+          const message = tierUp >= 3 ? `Blazing! ×${count}` : tierUp === 2 ? `On fire! ×${count}` : `Combo ×${count}`;
+          fx?.banner(message, tierUp >= 3 ? 'rose' : 'gold');
+        }
+      } else {
+        const { lost } = comboTracker.miss();
+        paintCharacters([previousPosition, state.position]);
+        fx?.wrong(span);
+        if (lost >= 10) fx?.pop(`Combo lost ×${lost}`, { tone: 'rose' });
+      }
+
       paintHint();
       paintKeyboard(key);
       syncHud();
+      paintCombo();
 
       if (result.finished) {
         state.finished = true;
@@ -404,7 +499,23 @@ function buildPracticeView(payload, ctx) {
       // Persist immediately: a refresh on the summary screen must not lose the
       // attempt that just produced it.
       await api.flush?.();
-      mount(summaryHost, buildSummary(result, ctx, lesson));
+
+      const metrics = result.record.metrics;
+      const fx = getEffects();
+
+      if (result.verdict.passed) {
+        // A pass earns the full celebration plus a score pop.
+        fx?.celebrate();
+        fx?.banner('Cleared!', 'gold');
+        fx?.pop(`+${metrics.wpm} WPM`, { tone: 'gold' });
+      } else {
+        fx?.pop(`${metrics.accuracy}% accuracy`, { tone: 'cyan' });
+      }
+
+      const summary = buildSummary(result, ctx, lesson);
+      summary.classList.add('summary-enter');
+      mount(summaryHost, summary);
+
       // Let the sidebar and any listener know progress moved.
       window.dispatchEvent(new CustomEvent('typebreak:progress-changed'));
     } catch (error) {
@@ -416,6 +527,7 @@ function buildPracticeView(payload, ctx) {
   paintHint();
   paintKeyboard();
   syncHud();
+  paintCombo();
   state.timer = setInterval(tickTimer, 250);
 
   // Focus the hidden input so the page is immediately typeable.
@@ -424,7 +536,7 @@ function buildPracticeView(payload, ctx) {
   const focusNote = h(
     'p.faint',
     { style: { fontSize: '11.5px', marginTop: '12px' } },
-    'Click the text area and start typing. Backspace is disabled in this drill; in flow mode mistakes are recorded and you keep going.',
+    'Click the text area and start typing. Keep a clean streak to build a combo — mistakes break it.',
   );
 
   return h(
@@ -433,8 +545,9 @@ function buildPracticeView(payload, ctx) {
     head,
     surface,
     input,
+    comboMeter,
     hud,
-    h('div', { style: { display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', marginBottom: '8px' } }, hintEl, controls),
+    h('div', { style: { display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', marginBottom: '8px', alignItems: 'center' } }, hintEl, controls),
     keyboard,
     focusNote,
     summaryHost,

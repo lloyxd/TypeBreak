@@ -8,20 +8,29 @@ import { h, statsStrip, card, barRow, pill, empty, duration, relativeTime } from
 import { client as api } from '../client.js';
 import { navigate } from '../router.js';
 import { pageHead } from './shared.js';
+import { mountainPath } from '../ui/mountain.js';
 
 export async function dashboardPage() {
   const data = await api.dashboard();
+  const allLessons = api.lessons();
+  const progressList = api.lessonProgress();
+  const progressById = new Map(progressList.map((p) => [p.lessonId, p]));
+  const progressOf = (id) => progressById.get(id) ?? { passed: false, attempts: 0 };
 
   const hasHistory = data.totals.attempts > 0;
 
   const strip = statsStrip([
-    { label: 'Streak', value: `${data.streak.current}d`, sub: `best ${data.streak.best}` },
+    { label: 'Streak', value: `${data.streak.current}d`, sub: `best ${data.streak.best}`, tone: 'gold' },
     { label: 'Accuracy', value: hasHistory ? `${data.totals.accuracy}%` : '—', sub: `${data.totals.attempts} exercises` },
     { label: 'Speed', value: hasHistory ? `${data.totals.wpm}` : '—', sub: 'words per minute' },
     { label: 'Practice', value: duration(data.totals.practiceMs), sub: 'total time' },
     { label: 'Lessons', value: `${data.overall.lessonsPassed}/${data.overall.lessonsTotal}`, sub: 'passed' },
-    { label: 'Overall', value: `${data.overall.percent}%`, sub: 'demonstrated ability' },
+    { label: 'Overall', value: `${data.overall.percent}%`, sub: 'demonstrated ability', tone: 'gold' },
   ]);
+
+  /* --- the climb --- */
+
+  const climb = mountainPath({ lessons: allLessons, progressOf, height: 420 });
 
   /* --- today's plan --- */
 
@@ -176,13 +185,15 @@ export async function dashboardPage() {
         : pill('Not yet practised today', 'yellow'),
     ),
     strip,
+    climb,
+    h('div', { style: { height: '26px' } }),
     h(
       'div.grid.grid-sidebar',
       null,
       planCard,
       h('div', null, tasksCard, h('div', { style: { height: '16px' } }), weaknessCard),
     ),
-    h('div', { style: { height: '24px' } }),
+    h('div', { style: { height: '26px' } }),
     h('div.grid.grid-2', null, fingerCard, recentCard),
   ];
 }

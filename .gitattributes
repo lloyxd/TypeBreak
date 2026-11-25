@@ -1,0 +1,10 @@
+# Normalise line endings so the repository stores LF regardless of the OS.
+# Without this, `core.autocrlf=true` on Windows rewrites every file on checkout
+# and git warns about each one — and a file committed from Windows can differ
+# byte-for-byte from the same file committed from Linux.
+* text=auto eol=lf
+
+# Binary assets must never be converted.
+*.png binary
+*.woff2 binary
+*.ico binary

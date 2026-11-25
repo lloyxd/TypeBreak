@@ -1,15 +1,15 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>TypeBreak — adaptive typing practice</title>
     <meta
       name="description"
-      content="An adaptive typing tutor: a fixed lesson library, per-finger weakness detection, and a daily plan built only from those lessons. Works offline; your progress stays on your device."
+      content="An adaptive typing tutor with a fixed lesson library, per-finger weakness detection and a daily plan built only from those lessons. Works offline; your progress stays on your device."
     />
-    <meta name="color-scheme" content="dark light" />
-    <meta name="theme-color" content="#0e1116" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#070a1c" />
 
     <!-- Home-screen install on iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -20,33 +20,60 @@
     <link rel="icon" href="./icons/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="icon" href="./icons/icon-192.png" sizes="192x192" type="image/png" />
     <link rel="manifest" href="./manifest.webmanifest" />
+
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
+    <div class="scene" id="scene"></div>
+
     <div class="app">
       <aside class="sidebar">
-        <div class="brand">Type<span>Break</span> <small>BTS</small></div>
+        <div class="brand">
+          <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+            <path d="M2 26 L11 8 L17 18 L21 12 L30 26 Z" fill="#eef3ff" />
+            <path d="M11 8 L14.5 14.5 L8 14 Z" fill="#ffd45c" />
+            <path d="M21 12 L24 17 L18 17 Z" fill="#7fd8ff" />
+          </svg>
+          Type<em>Break</em>
+          <small>BTS</small>
+        </div>
         <nav class="nav" id="nav" aria-label="Main">
-          <a href="#/">Dashboard</a>
-          <a href="#/lessons">Lessons</a>
-          <a href="#/progress">Progress</a>
-          <a href="#/adaptive">Adaptive</a>
-          <a href="#/settings">Settings</a>
+          <a href="#/">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 11 L12 3 L21 11 V21 H3 Z" /></svg>
+            Dashboard
+          </a>
+          <a href="#/lessons">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 6 h7 l2 3 h9 v12 H3 Z" /></svg>
+            Lessons
+          </a>
+          <a href="#/progress">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 20 V10 M10 20 V4 M16 20 v-7 M22 20 v-4" /></svg>
+            Progress
+          </a>
+          <a href="#/adaptive">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 l2.4 5.6 6.1.5 -4.6 4 1.4 6 -5.3-3.2 -5.3 3.2 1.4-6 -4.6-4 6.1-.5 Z" /></svg>
+            Adaptive
+          </a>
+          <a href="#/settings">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2" /><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1" /></svg>
+            Settings
+          </a>
         </nav>
         <div class="sidebar-footer">
-          <span id="sidebar-streak">—</span>
+          <span class="streak-badge" id="sidebar-streak">—</span>
           <span id="sidebar-accuracy">—</span>
           <span id="sidebar-save" class="sidebar-save">Saved in this browser</span>
         </div>
       </aside>
       <main class="main">
         <div id="view" aria-live="polite">
-          <div class="loading">Starting TypeBreak…</div>
+          <div class="loading">Summoning TypeBreak…</div>
         </div>
       </main>
     </div>
+
     <noscript>
-      <p style="padding: 24px; color: #e6edf3; font-family: system-ui, sans-serif">
+      <p style="padding: 24px; color: #eef3ff; font-family: system-ui, sans-serif">
         TypeBreak needs JavaScript: all typing practice and progress tracking run in your browser.
       </p>
     </noscript>

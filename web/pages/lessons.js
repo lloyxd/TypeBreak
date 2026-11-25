@@ -6,6 +6,7 @@ import { h, section, card, pill, empty, relativeTime, clear } from '../dom.js';
 import { client as api } from '../client.js';
 import { navigate } from '../router.js';
 import { pageHead, errorBox } from './shared.js';
+import { mountainPath } from '../ui/mountain.js';
 
 /** Facets are derived from a static library, so one lookup per session is enough. */
 let cachedFacets = null;
@@ -25,6 +26,11 @@ export async function lessonsPage({ query }) {
 
   const facets = cachedFacets ?? { fingers: [], movements: [], categories: [], levels: [] };
 
+  // Progress is needed per row so a passed lesson reads differently from an
+  // untouched one at a glance.
+  const progressById = new Map(api.lessonProgress().map((p) => [p.lessonId, p]));
+  const progressOf = (id) => progressById.get(id);
+
   const listHost = h('div.card', { style: { padding: 0, overflow: 'hidden' } });
 
   function renderList(items) {
@@ -37,11 +43,13 @@ export async function lessonsPage({ query }) {
       h(
         'div',
         null,
-        items.map((lesson) =>
-          h(
-            'div.lesson-row',
+        items.map((lesson) => {
+          const progress = progressOf(lesson.id);
+          const passed = Boolean(progress?.passed);
+          return h(
+            `div.lesson-row${passed ? '.is-passed' : ''}`,
             { style: { cursor: 'pointer' }, onClick: () => navigate(`/lesson/${encodeURIComponent(lesson.id)}`) },
-            h('div.lesson-index', null, `L${lesson.level}`),
+            h(`div.lesson-index${passed ? '.done' : ''}`, null, passed ? '✓' : `L${lesson.level}`),
             h(
               'div',
               null,
@@ -54,10 +62,18 @@ export async function lessonsPage({ query }) {
                 h('span', null, `${lesson.exercises.length} exercises`),
               ),
               h('div.task-desc', null, lesson.description.slice(0, 120) + (lesson.description.length > 120 ? '…' : '')),
+              progress?.attempts
+                ? h('div.lesson-meta', { style: { marginTop: '4px' } },
+                    passed
+                      ? h('span', { style: { color: 'var(--green)', fontWeight: '700' } }, `Passed · best ${progress.bestAccuracy}%`)
+                      : h('span', { style: { color: 'var(--gold)', fontWeight: '700' } }, `${progress.attempts} attempt${progress.attempts === 1 ? '' : 's'} · not passed yet`),
+                    progress.bestWpm ? h('span.faint', null, `· ${progress.bestWpm} WPM best`) : null,
+                  )
+                : null,
             ),
-            h('span.pill', null, `L${lesson.level}`),
-          ),
-        ),
+            passed ? pill('Passed', 'green') : h('span.pill', null, `L${lesson.level}`),
+          );
+        }),
       ),
     );
   }
@@ -139,10 +155,17 @@ export async function lessonsPage({ query }) {
   );
 
   const countLabel = h('p.faint', { style: { fontSize: '12px', margin: '0 0 12px' } },
-    `${lessons.length} lesson${lessons.length === 1 ? '' : 's'}${activeFilters.length ? ' matching filters' : ` · ${overview.overview?.exerciseCount ?? overview.exerciseCount ?? ''} exercises total`}`);
+    `${lessons.length} lesson${lessons.length === 1 ? '' : 's'}${activeFilters.length ? ' matching filters' : ` · ${overview.counts?.exercises ?? ''} exercises total`}`);
+
+  // The climb map belongs here as well: browsing the library and seeing where you
+  // are on the mountain are the same question.
+  const climb = mountainPath({ lessons: api.lessons(), progressOf, height: 340 });
 
   return [
-    pageHead('Lessons', 'Every lesson in the preset library. The adaptive planner only ever selects from these.'),
+    pageHead('Lessons', 'Every lesson is available at any time — the climb shows where you are, not a gate.'),
+    climb,
+    h('div', { style: { height: '26px' } }),
+    h('h2', null, 'Browse the library'),
     filterBar,
     countLabel,
     listHost,
