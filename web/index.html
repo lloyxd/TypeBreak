@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TypeBreak — adaptive typing practice</title>
+    <meta name="description" content="An adaptive typing tutor: predefined lessons, performance-based weakness detection, and a daily plan built only from the existing lesson library." />
+    <meta name="color-scheme" content="dark light" />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%234a9eff'/><text x='16' y='23' font-size='19' font-family='monospace' font-weight='bold' text-anchor='middle' fill='%2307101c'>T</text></svg>" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="brand">Type<span>Break</span> <small>BTS</small></div>
+        <nav class="nav" id="nav" aria-label="Main">
+          <a href="#/">Dashboard</a>
+          <a href="#/lessons">Lessons</a>
+          <a href="#/progress">Progress</a>
+          <a href="#/adaptive">Adaptive</a>
+          <a href="#/settings">Settings</a>
+        </nav>
+        <div class="sidebar-footer">
+          <span id="sidebar-streak">—</span>
+          <span id="sidebar-accuracy">—</span>
+        </div>
+      </aside>
+      <main class="main">
+        <div id="view" aria-live="polite">
+          <div class="loading">Loading…</div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
+

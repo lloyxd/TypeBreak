@@ -1,0 +1,3062 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "tools/build-lessons.js",
+  "note": "Predefined lesson library. Runtime code must only read this file and never generate exercise content.",
+  "counts": {
+    "lessons": 55,
+    "exercises": 177,
+    "byCategory": {
+      "finger-isolation": 8,
+      "movement-variation": 29,
+      "pattern": 11,
+      "finger-combination": 6,
+      "coordination": 1
+    }
+  },
+  "lessons": [
+    {
+      "id": "L-LINDEX-HOME",
+      "name": "Left index · home position",
+      "description": "Isolate the left index on \"a\", \"s\", \"d\", \"f\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "finger-isolation",
+      "level": 1,
+      "fingers": [
+        "LINDEX"
+      ],
+      "movements": [
+        "home"
+      ],
+      "keys": [
+        "a",
+        "s",
+        "d",
+        "f"
+      ],
+      "exercises": [
+        {
+          "id": "L-LINDEX-HOME-E1",
+          "text": "ad fdf aa dffa aff",
+          "focus": "f a"
+        },
+        {
+          "id": "L-LINDEX-HOME-E2",
+          "text": "fasf af fssf adds fsf",
+          "focus": "f a"
+        },
+        {
+          "id": "L-LINDEX-HOME-E3",
+          "text": "afaa ffas fsd afda aa",
+          "focus": "f a"
+        }
+      ],
+      "outcome": "Presses the home key reliably without moving the other fingers off their anchors.",
+      "related": [
+        "L-LINDEX-UP",
+        "L-LINDEX-DOWN",
+        "L-LINDEX-STRETCH"
+      ],
+      "criteria": {
+        "minAccuracy": 96,
+        "minWpm": 21,
+        "attempts": 2,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 53,
+      "order": 1
+    },
+    {
+      "id": "L-RINDEX-HOME",
+      "name": "Right index · home position",
+      "description": "Isolate the right index on \"j\", \"k\", \"l\", \";\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "finger-isolation",
+      "level": 1,
+      "fingers": [
+        "RINDEX"
+      ],
+      "movements": [
+        "home"
+      ],
+      "keys": [
+        "j",
+        "k",
+        "l",
+        ";"
+      ],
+      "exercises": [
+        {
+          "id": "L-RINDEX-HOME-E1",
+          "text": "lj jl ;j jj ;jk kllj",
+          "focus": "j"
+        },
+        {
+          "id": "L-RINDEX-HOME-E2",
+          "text": "j; jj; l;j jj ;;",
+          "focus": "j"
+        },
+        {
+          "id": "L-RINDEX-HOME-E3",
+          "text": "kkjj jkl lj;; ;jl kjl",
+          "focus": "j"
+        }
+      ],
+      "outcome": "Presses the home key reliably without moving the other fingers off their anchors.",
+      "related": [
+        "L-RINDEX-UP",
+        "L-RINDEX-DOWN",
+        "L-RINDEX-STRETCH"
+      ],
+      "criteria": {
+        "minAccuracy": 96,
+        "minWpm": 21,
+        "attempts": 2,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 53,
+      "order": 2
+    },
+    {
+      "id": "L-LINDEX-DOWN",
+      "name": "Left index · downward reach",
+      "description": "Isolate the left index on \"v\", \"b\", \"z\", \"x\", \"c\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 2,
+      "fingers": [
+        "LINDEX"
+      ],
+      "movements": [
+        "down"
+      ],
+      "keys": [
+        "v",
+        "b",
+        "z",
+        "x",
+        "c"
+      ],
+      "exercises": [
+        {
+          "id": "L-LINDEX-DOWN-E1",
+          "text": "bb bc ccvb vc zbcv",
+          "focus": "v b"
+        },
+        {
+          "id": "L-LINDEX-DOWN-E2",
+          "text": "zvbz vb zzv vvc bv",
+          "focus": "v b"
+        },
+        {
+          "id": "L-LINDEX-DOWN-E3",
+          "text": "bb vz vvb xbz bv",
+          "focus": "v b"
+        }
+      ],
+      "outcome": "Reaches the bottom row and returns to home cleanly.",
+      "related": [
+        "L-LINDEX-HOME",
+        "L-LINDEX-UP",
+        "L-LINDEX-STRETCH"
+      ],
+      "criteria": {
+        "minAccuracy": 95,
+        "minWpm": 24,
+        "attempts": 2,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 61,
+      "order": 3
+    },
+    {
+      "id": "L-LMIDDLE-HOME",
+      "name": "Left middle · home position",
+      "description": "Isolate the left middle on \"a\", \"s\", \"d\", \"f\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "finger-isolation",
+      "level": 2,
+      "fingers": [
+        "LMIDDLE"
+      ],
+      "movements": [
+        "home"
+      ],
+      "keys": [
+        "a",
+        "s",
+        "d",
+        "f"
+      ],
+      "exercises": [
+        {
+          "id": "L-LMIDDLE-HOME-E1",
+          "text": "ds sfaf da dfdd",
+          "focus": "d a"
+        },
+        {
+          "id": "L-LMIDDLE-HOME-E2",
+          "text": "df aaff ds ads",
+          "focus": "d a"
+        },
+        {
+          "id": "L-LMIDDLE-HOME-E3",
+          "text": "sffd ffd ds sdds",
+          "focus": "d a"
+        }
+      ],
+      "outcome": "Presses the home key reliably without moving the other fingers off their anchors.",
+      "related": [
+        "L-LMIDDLE-UP",
+        "L-LMIDDLE-DOWN",
+        "L-LMIDDLE-STRETCH"
+      ],
+      "criteria": {
+        "minAccuracy": 95,
+        "minWpm": 24,
+        "attempts": 2,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 61,
+      "order": 4
+    },
+    {
+      "id": "L-RINDEX-DOWN",
+      "name": "Right index · downward reach",
+      "description": "Isolate the right index on \"n\", \"m\", \",\", \".\", \"/\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 2,
+      "fingers": [
+        "RINDEX"
+      ],
+      "movements": [
+        "down"
+      ],
+      "keys": [
+        "n",
+        "m",
+        ",",
+        ".",
+        "/"
+      ],
+      "exercises": [
+        {
+          "id": "L-RINDEX-DOWN-E1",
+          "text": "nn nm n/ n.n",
+          "focus": "n m"
+        },
+        {
+          "id": "L-RINDEX-DOWN-E2",
+          "text": "/nn nm nn mn",
+          "focus": "n m"
+        },
+        {
+          "id": "L-RINDEX-DOWN-E3",
+          "text": "nnm mn,n mmnn mm mmn n,.",
+          "focus": "n m"
+        }
+      ],
+      "outcome": "Reaches the bottom row and returns to home cleanly.",
+      "related": [
+        "L-RINDEX-HOME",
+        "L-RINDEX-UP",
+        "L-RINDEX-STRETCH"
+      ],
+      "criteria": {
+        "minAccuracy": 95,
+        "minWpm": 24,
+        "attempts": 2,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 61,
+      "order": 5
+    },
+    {
+      "id": "L-RMIDDLE-HOME",
+      "name": "Right middle · home position",
+      "description": "Isolate the right middle on \"j\", \"k\", \"l\", \";\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "finger-isolation",
+      "level": 2,
+      "fingers": [
+        "RMIDDLE"
+      ],
+      "movements": [
+        "home"
+      ],
+      "keys": [
+        "j",
+        "k",
+        "l",
+        ";"
+      ],
+      "exercises": [
+        {
+          "id": "L-RMIDDLE-HOME-E1",
+          "text": "kkj; k;; kkj kj;",
+          "focus": "k j"
+        },
+        {
+          "id": "L-RMIDDLE-HOME-E2",
+          "text": ";;lk jkjk jl ;l lk kjl",
+          "focus": "k j"
+        },
+        {
+          "id": "L-RMIDDLE-HOME-E3",
+          "text": "kkj jj kk ;k; ;kjk",
+          "focus": "k j"
+        }
+      ],
+      "outcome": "Presses the home key reliably without moving the other fingers off their anchors.",
+      "related": [
+        "L-RMIDDLE-UP",
+        "L-RMIDDLE-DOWN",
+        "L-RMIDDLE-STRETCH"
+      ],
+      "criteria": {
+        "minAccuracy": 95,
+        "minWpm": 24,
+        "attempts": 2,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 61,
+      "order": 6
+    },
+    {
+      "id": "L-LINDEX-INNER",
+      "name": "Left index · inner-column reach",
+      "description": "Isolate the left index on \"f\", \"t\", \"g\", \"b\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 3,
+      "fingers": [
+        "LINDEX"
+      ],
+      "movements": [
+        "inner"
+      ],
+      "keys": [
+        "f",
+        "t",
+        "g",
+        "b"
+      ],
+      "exercises": [
+        {
+          "id": "L-LINDEX-INNER-E1",
+          "text": "bbgg ftb bt tg tbb tt",
+          "focus": "t g b f"
+        },
+        {
+          "id": "L-LINDEX-INNER-E2",
+          "text": "gttf ggf bt fbb tbt",
+          "focus": "t g b f"
+        },
+        {
+          "id": "L-LINDEX-INNER-E3",
+          "text": "ttg gg tg fbt bbtb",
+          "focus": "t g b f"
+        }
+      ],
+      "outcome": "Reaches the inner-column keys with a controlled index motion.",
+      "related": [
+        "L-LINDEX-HOME",
+        "L-LINDEX-UP",
+        "L-LINDEX-DOWN"
+      ],
+      "criteria": {
+        "minAccuracy": 94,
+        "minWpm": 27,
+        "attempts": 2,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 69,
+      "order": 7
+    },
+    {
+      "id": "L-LINDEX-UP",
+      "name": "Left index · upward reach",
+      "description": "Isolate the left index on \"r\", \"t\", \"q\", \"w\", \"e\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 3,
+      "fingers": [
+        "LINDEX"
+      ],
+      "movements": [
+        "up"
+      ],
+      "keys": [
+        "r",
+        "t",
+        "q",
+        "w",
+        "e"
+      ],
+      "exercises": [
+        {
+          "id": "L-LINDEX-UP-E1",
+          "text": "tw rt qt tewt rrtt",
+          "focus": "r t"
+        },
+        {
+          "id": "L-LINDEX-UP-E2",
+          "text": "rtw wttr etr rrtr",
+          "focus": "r t"
+        },
+        {
+          "id": "L-LINDEX-UP-E3",
+          "text": "errt wrtr te trrt rtt",
+          "focus": "r t"
+        }
+      ],
+      "outcome": "Reaches one row up and returns to home without looking down.",
+      "related": [
+        "L-LINDEX-HOME",
+        "L-LINDEX-DOWN",
+        "L-LINDEX-STRETCH"
+      ],
+      "criteria": {
+        "minAccuracy": 94,
+        "minWpm": 27,
+        "attempts": 2,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 69,
+      "order": 8
+    },
+    {
+      "id": "L-LMIDDLE-DOWN",
+      "name": "Left middle · downward reach",
+      "description": "Isolate the left middle on \"c\", \"z\", \"x\", \"v\", \"b\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 3,
+      "fingers": [
+        "LMIDDLE"
+      ],
+      "movements": [
+        "down"
+      ],
+      "keys": [
+        "c",
+        "z",
+        "x",
+        "v",
+        "b"
+      ],
+      "exercises": [
+        {
+          "id": "L-LMIDDLE-DOWN-E1",
+          "text": "xczv cb czvv zb xx",
+          "focus": "c"
+        },
+        {
+          "id": "L-LMIDDLE-DOWN-E2",
+          "text": "cc cc xczx vcc",
+          "focus": "c"
+        },
+        {
+          "id": "L-LMIDDLE-DOWN-E3",
+          "text": "zc zbxv bccz cczv",
+          "focus": "c"
+        }
+      ],
+      "outcome": "Reaches the bottom row and returns to home cleanly.",
+      "related": [
+        "L-LMIDDLE-HOME",
+        "L-LMIDDLE-UP",
+        "L-LMIDDLE-STRETCH"
+      ],
+      "criteria": {
+        "minAccuracy": 94,
+        "minWpm": 27,
+        "attempts": 2,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 69,
+      "order": 9
+    },
+    {
+      "id": "L-LRING-HOME",
+      "name": "Left ring · home position",
+      "description": "Isolate the left ring on \"a\", \"s\", \"d\", \"f\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "finger-isolation",
+      "level": 3,
+      "fingers": [
+        "LRING"
+      ],
+      "movements": [
+        "home"
+      ],
+      "keys": [
+        "a",
+        "s",
+        "d",
+        "f"
+      ],
+      "exercises": [
+        {
+          "id": "L-LRING-HOME-E1",
+          "text": "faf df as ss da ssas",
+          "focus": "s a"
+        },
+        {
+          "id": "L-LRING-HOME-E2",
+          "text": "afaf fssa as fsds fada sd",
+          "focus": "s a"
+        },
+        {
+          "id": "L-LRING-HOME-E3",
+          "text": "ssdf dsfs ds asd",
+          "focus": "s a"
+        }
+      ],
+      "outcome": "Presses the home key reliably without moving the other fingers off their anchors.",
+      "related": [
+        "L-LRING-UP",
+        "L-LRING-DOWN",
+        "L-LRING-STRETCH"
+      ],
+      "criteria": {
+        "minAccuracy": 94,
+        "minWpm": 27,
+        "attempts": 2,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 69,
+      "order": 10
+    },
+    {
+      "id": "L-RINDEX-INNER",
+      "name": "Right index · inner-column reach",
+      "description": "Isolate the right index on \"j\", \"y\", \"h\", \"n\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 3,
+      "fingers": [
+        "RINDEX"
+      ],
+      "movements": [
+        "inner"
+      ],
+      "keys": [
+        "j",
+        "y",
+        "h",
+        "n"
+      ],
+      "exercises": [
+        {
+          "id": "L-RINDEX-INNER-E1",
+          "text": "yhnn yhn yyjn nh hyn",
+          "focus": "y h n j"
+        },
+        {
+          "id": "L-RINDEX-INNER-E2",
+          "text": "yhhy yj njy yh hh",
+          "focus": "y h n j"
+        },
+        {
+          "id": "L-RINDEX-INNER-E3",
+          "text": "yhh nhyn hjh yn",
+          "focus": "y h n j"
+        }
+      ],
+      "outcome": "Reaches the inner-column keys with a controlled index motion.",
+      "related": [
+        "L-RINDEX-HOME",
+        "L-RINDEX-UP",
+        "L-RINDEX-DOWN"
+      ],
+      "criteria": {
+        "minAccuracy": 94,
+        "minWpm": 27,
+        "attempts": 2,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 69,
+      "order": 11
+    },
+    {
+      "id": "L-RINDEX-UP",
+      "name": "Right index · upward reach",
+      "description": "Isolate the right index on \"y\", \"u\", \"i\", \"o\", \"p\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 3,
+      "fingers": [
+        "RINDEX"
+      ],
+      "movements": [
+        "up"
+      ],
+      "keys": [
+        "y",
+        "u",
+        "i",
+        "o",
+        "p"
+      ],
+      "exercises": [
+        {
+          "id": "L-RINDEX-UP-E1",
+          "text": "yyo yyou uyy yuuy up",
+          "focus": "y u"
+        },
+        {
+          "id": "L-RINDEX-UP-E2",
+          "text": "yu iou ui uoiu",
+          "focus": "y u"
+        },
+        {
+          "id": "L-RINDEX-UP-E3",
+          "text": "yypo yoiu pu iup yy uuyy",
+          "focus": "y u"
+        }
+      ],
+      "outcome": "Reaches one row up and returns to home without looking down.",
+      "related": [
+        "L-RINDEX-HOME",
+        "L-RINDEX-DOWN",
+        "L-RINDEX-STRETCH"
+      ],
+      "criteria": {
+        "minAccuracy": 94,
+        "minWpm": 27,
+        "attempts": 2,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 69,
+      "order": 12
+    },
+    {
+      "id": "L-RMIDDLE-DOWN",
+      "name": "Right middle · downward reach",
+      "description": "Isolate the right middle on \",\", \"n\", \"m\", \".\", \"/\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 3,
+      "fingers": [
+        "RMIDDLE"
+      ],
+      "movements": [
+        "down"
+      ],
+      "keys": [
+        ",",
+        "n",
+        "m",
+        ".",
+        "/"
+      ],
+      "exercises": [
+        {
+          "id": "L-RMIDDLE-DOWN-E1",
+          "text": ",., ,,/, ,,m n,n ,,n, ,mm",
+          "focus": ","
+        },
+        {
+          "id": "L-RMIDDLE-DOWN-E2",
+          "text": "/n /m/m m/,m ,/",
+          "focus": ","
+        },
+        {
+          "id": "L-RMIDDLE-DOWN-E3",
+          "text": "nm .m/ ,n n,, ,/ ,.,",
+          "focus": ","
+        }
+      ],
+      "outcome": "Reaches the bottom row and returns to home cleanly.",
+      "related": [
+        "L-RMIDDLE-HOME",
+        "L-RMIDDLE-UP",
+        "L-RMIDDLE-STRETCH"
+      ],
+      "criteria": {
+        "minAccuracy": 94,
+        "minWpm": 27,
+        "attempts": 2,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 69,
+      "order": 13
+    },
+    {
+      "id": "L-RRING-HOME",
+      "name": "Right ring · home position",
+      "description": "Isolate the right ring on \"j\", \"k\", \"l\", \";\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "finger-isolation",
+      "level": 3,
+      "fingers": [
+        "RRING"
+      ],
+      "movements": [
+        "home"
+      ],
+      "keys": [
+        "j",
+        "k",
+        "l",
+        ";"
+      ],
+      "exercises": [
+        {
+          "id": "L-RRING-HOME-E1",
+          "text": "lkl ljl ;j l;ll llk",
+          "focus": "l j"
+        },
+        {
+          "id": "L-RRING-HOME-E2",
+          "text": "kl jll lk kjll ;lj lkjl",
+          "focus": "l j"
+        },
+        {
+          "id": "L-RRING-HOME-E3",
+          "text": ";l; jjl; lj kk jl",
+          "focus": "l j"
+        }
+      ],
+      "outcome": "Presses the home key reliably without moving the other fingers off their anchors.",
+      "related": [
+        "L-RRING-UP",
+        "L-RRING-DOWN",
+        "L-RRING-STRETCH"
+      ],
+      "criteria": {
+        "minAccuracy": 94,
+        "minWpm": 27,
+        "attempts": 2,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 69,
+      "order": 14
+    },
+    {
+      "id": "L-LMIDDLE-UP",
+      "name": "Left middle · upward reach",
+      "description": "Isolate the left middle on \"e\", \"q\", \"w\", \"r\", \"t\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 4,
+      "fingers": [
+        "LMIDDLE"
+      ],
+      "movements": [
+        "up"
+      ],
+      "keys": [
+        "e",
+        "q",
+        "w",
+        "r",
+        "t"
+      ],
+      "exercises": [
+        {
+          "id": "L-LMIDDLE-UP-E1",
+          "text": "ee etrr qt rrte re et",
+          "focus": "e"
+        },
+        {
+          "id": "L-LMIDDLE-UP-E2",
+          "text": "eeq qtwe ree qtq",
+          "focus": "e"
+        },
+        {
+          "id": "L-LMIDDLE-UP-E3",
+          "text": "weew wew eerr re",
+          "focus": "e"
+        }
+      ],
+      "outcome": "Reaches one row up and returns to home without looking down.",
+      "related": [
+        "L-LMIDDLE-HOME",
+        "L-LMIDDLE-DOWN",
+        "L-LMIDDLE-STRETCH"
+      ],
+      "criteria": {
+        "minAccuracy": 93,
+        "minWpm": 30,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 77,
+      "order": 15
+    },
+    {
+      "id": "L-LPINKY-HOME",
+      "name": "Left pinky · home position",
+      "description": "Isolate the left pinky on \"a\", \"s\", \"d\", \"f\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "finger-isolation",
+      "level": 4,
+      "fingers": [
+        "LPINKY"
+      ],
+      "movements": [
+        "home"
+      ],
+      "keys": [
+        "a",
+        "s",
+        "d",
+        "f"
+      ],
+      "exercises": [
+        {
+          "id": "L-LPINKY-HOME-E1",
+          "text": "ass fdfa fa aa sdsa",
+          "focus": "a"
+        },
+        {
+          "id": "L-LPINKY-HOME-E2",
+          "text": "dsda ad as sada sa",
+          "focus": "a"
+        },
+        {
+          "id": "L-LPINKY-HOME-E3",
+          "text": "afd ssa saa ad aa",
+          "focus": "a"
+        }
+      ],
+      "outcome": "Presses the home key reliably without moving the other fingers off their anchors.",
+      "related": [
+        "L-LPINKY-UP",
+        "L-LPINKY-DOWN",
+        "L-LPINKY-STRETCH"
+      ],
+      "criteria": {
+        "minAccuracy": 93,
+        "minWpm": 30,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 77,
+      "order": 16
+    },
+    {
+      "id": "L-LRING-DOWN",
+      "name": "Left ring · downward reach",
+      "description": "Isolate the left ring on \"x\", \"z\", \"c\", \"v\", \"b\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 4,
+      "fingers": [
+        "LRING"
+      ],
+      "movements": [
+        "down"
+      ],
+      "keys": [
+        "x",
+        "z",
+        "c",
+        "v",
+        "b"
+      ],
+      "exercises": [
+        {
+          "id": "L-LRING-DOWN-E1",
+          "text": "bcv vvxv bxx cvx cbcx",
+          "focus": "x"
+        },
+        {
+          "id": "L-LRING-DOWN-E2",
+          "text": "xxz xc xzcx cx zx bbxb",
+          "focus": "x"
+        },
+        {
+          "id": "L-LRING-DOWN-E3",
+          "text": "cx bcxx xcbv bcx xx xxvb",
+          "focus": "x"
+        }
+      ],
+      "outcome": "Reaches the bottom row and returns to home cleanly.",
+      "related": [
+        "L-LRING-HOME",
+        "L-LRING-UP",
+        "L-LRING-STRETCH"
+      ],
+      "criteria": {
+        "minAccuracy": 93,
+        "minWpm": 30,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 77,
+      "order": 17
+    },
+    {
+      "id": "L-LTHUMB-SPACE",
+      "name": "Left thumb · space bar control",
+      "description": "Keep four fingers anchored on a home-row quartet and drive the space bar with the left thumb, letting the other hand rest between words.",
+      "category": "movement-variation",
+      "level": 4,
+      "fingers": [
+        "LTHUMB"
+      ],
+      "movements": [
+        "space"
+      ],
+      "keys": [
+        "a",
+        "s",
+        "d",
+        "f",
+        "j",
+        "k",
+        "l"
+      ],
+      "exercises": [
+        {
+          "id": "L-LTHUMB-SPACE-E1",
+          "text": "kfl fas ffd faj ls",
+          "focus": "a s d f j k l"
+        },
+        {
+          "id": "L-LTHUMB-SPACE-E2",
+          "text": "sflj kjdl skd af fd dfl",
+          "focus": "a s d f j k l"
+        },
+        {
+          "id": "L-LTHUMB-SPACE-E3",
+          "text": "dfsj aflf kj adkk",
+          "focus": "a s d f j k l"
+        }
+      ],
+      "outcome": "Strikes the space bar with the thumb while the other fingers stay anchored.",
+      "related": [],
+      "criteria": {
+        "minAccuracy": 93,
+        "minWpm": 30,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 77,
+      "order": 18
+    },
+    {
+      "id": "L-RMIDDLE-UP",
+      "name": "Right middle · upward reach",
+      "description": "Isolate the right middle on \"i\", \"y\", \"u\", \"o\", \"p\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 4,
+      "fingers": [
+        "RMIDDLE"
+      ],
+      "movements": [
+        "up"
+      ],
+      "keys": [
+        "i",
+        "y",
+        "u",
+        "o",
+        "p"
+      ],
+      "exercises": [
+        {
+          "id": "L-RMIDDLE-UP-E1",
+          "text": "pyi uipi oi ii yui opi",
+          "focus": "i"
+        },
+        {
+          "id": "L-RMIDDLE-UP-E2",
+          "text": "iio poiu yui uui uoi",
+          "focus": "i"
+        },
+        {
+          "id": "L-RMIDDLE-UP-E3",
+          "text": "iy ii ppyi puio",
+          "focus": "i"
+        }
+      ],
+      "outcome": "Reaches one row up and returns to home without looking down.",
+      "related": [
+        "L-RMIDDLE-HOME",
+        "L-RMIDDLE-DOWN",
+        "L-RMIDDLE-STRETCH"
+      ],
+      "criteria": {
+        "minAccuracy": 93,
+        "minWpm": 30,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 77,
+      "order": 19
+    },
+    {
+      "id": "L-RPINKY-HOME",
+      "name": "Right pinky · home position",
+      "description": "Isolate the right pinky on \"j\", \"k\", \"l\", \";\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "finger-isolation",
+      "level": 4,
+      "fingers": [
+        "RPINKY"
+      ],
+      "movements": [
+        "home"
+      ],
+      "keys": [
+        "j",
+        "k",
+        "l",
+        ";"
+      ],
+      "exercises": [
+        {
+          "id": "L-RPINKY-HOME-E1",
+          "text": ";; ;j ;;j; ;;jk",
+          "focus": "; j"
+        },
+        {
+          "id": "L-RPINKY-HOME-E2",
+          "text": ";j lj;j ;lkl k;jl lkj; ;;j",
+          "focus": "; j"
+        },
+        {
+          "id": "L-RPINKY-HOME-E3",
+          "text": "k;kl ;;l ;; ;kl; ;;j",
+          "focus": "; j"
+        }
+      ],
+      "outcome": "Presses the home key reliably without moving the other fingers off their anchors.",
+      "related": [
+        "L-RPINKY-UP",
+        "L-RPINKY-DOWN",
+        "L-RPINKY-STRETCH"
+      ],
+      "criteria": {
+        "minAccuracy": 93,
+        "minWpm": 30,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 77,
+      "order": 20
+    },
+    {
+      "id": "L-RRING-DOWN",
+      "name": "Right ring · downward reach",
+      "description": "Isolate the right ring on \".\", \"n\", \"m\", \",\", \"/\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 4,
+      "fingers": [
+        "RRING"
+      ],
+      "movements": [
+        "down"
+      ],
+      "keys": [
+        ".",
+        "n",
+        "m",
+        ",",
+        "/"
+      ],
+      "exercises": [
+        {
+          "id": "L-RRING-DOWN-E1",
+          "text": "mn/. ..nn ,/.. n.., ,m.",
+          "focus": "."
+        },
+        {
+          "id": "L-RRING-DOWN-E2",
+          "text": ",..n /,/. ./.. ,m.n n,",
+          "focus": "."
+        },
+        {
+          "id": "L-RRING-DOWN-E3",
+          "text": ",m nm nn.m /./ ..,n",
+          "focus": "."
+        }
+      ],
+      "outcome": "Reaches the bottom row and returns to home cleanly.",
+      "related": [
+        "L-RRING-HOME",
+        "L-RRING-UP",
+        "L-RRING-STRETCH"
+      ],
+      "criteria": {
+        "minAccuracy": 93,
+        "minWpm": 30,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 77,
+      "order": 21
+    },
+    {
+      "id": "L-RTHUMB-SPACE",
+      "name": "Right thumb · space bar control",
+      "description": "Keep four fingers anchored on a home-row quartet and drive the space bar with the right thumb, letting the other hand rest between words.",
+      "category": "movement-variation",
+      "level": 4,
+      "fingers": [
+        "RTHUMB"
+      ],
+      "movements": [
+        "space"
+      ],
+      "keys": [
+        "a",
+        "s",
+        "d",
+        "f",
+        "j",
+        "k",
+        "l"
+      ],
+      "exercises": [
+        {
+          "id": "L-RTHUMB-SPACE-E1",
+          "text": "fsk fjja kaa laj jjfj ffjd",
+          "focus": "a s d f j k l"
+        },
+        {
+          "id": "L-RTHUMB-SPACE-E2",
+          "text": "df skal jkjd kk",
+          "focus": "a s d f j k l"
+        },
+        {
+          "id": "L-RTHUMB-SPACE-E3",
+          "text": "sf ffaj falf fdk",
+          "focus": "a s d f j k l"
+        }
+      ],
+      "outcome": "Strikes the space bar with the thumb while the other fingers stay anchored.",
+      "related": [],
+      "criteria": {
+        "minAccuracy": 93,
+        "minWpm": 30,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 77,
+      "order": 22
+    },
+    {
+      "id": "L-SKILL-ALTERNATION",
+      "name": "Cross-hand alternation",
+      "description": "Alternate strictly left/right on the home and top rows. One hand rests fully while the other works — the basis of sustainable speed.",
+      "category": "pattern",
+      "level": 4,
+      "fingers": [
+        "LPINKY",
+        "LRING",
+        "LMIDDLE",
+        "LINDEX",
+        "RINDEX",
+        "RMIDDLE",
+        "RRING",
+        "RPINKY"
+      ],
+      "movements": [
+        "alternation"
+      ],
+      "keys": [
+        "a",
+        "s",
+        "d",
+        "f",
+        "j",
+        "k",
+        "l",
+        "e",
+        "i",
+        "o",
+        "n",
+        "r"
+      ],
+      "exercises": [
+        {
+          "id": "L-SKILL-ALTERNATION-E1",
+          "text": "sad had fad lad sis dad ask lass fall dahl",
+          "focus": "a s d f j k l e"
+        },
+        {
+          "id": "L-SKILL-ALTERNATION-E2",
+          "text": "flak jade safe lead sank lake hash gala half",
+          "focus": "a s d f j k l e"
+        },
+        {
+          "id": "L-SKILL-ALTERNATION-E3",
+          "text": "else idea also done fire near road said side",
+          "focus": "a s d f j k l e"
+        },
+        {
+          "id": "L-SKILL-ALTERNATION-E4",
+          "text": "hand land send lend held shelf half dash khan",
+          "focus": "a s d f j k l e"
+        }
+      ],
+      "outcome": "Keeps one hand idle while the other types, removing same-hand finger tangles.",
+      "related": [
+        "L-SKILL-ROLL",
+        "L-SKILL-DIGRAPH"
+      ],
+      "criteria": {
+        "minAccuracy": 93,
+        "minWpm": 30,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 100,
+      "order": 23
+    },
+    {
+      "id": "L-LINDEX-STRETCH",
+      "name": "Left index · number-row stretch",
+      "description": "Isolate the left index on \"4\", \"5\", \"1\", \"2\", \"3\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 5,
+      "fingers": [
+        "LINDEX"
+      ],
+      "movements": [
+        "stretch"
+      ],
+      "keys": [
+        "4",
+        "5",
+        "1",
+        "2",
+        "3"
+      ],
+      "exercises": [
+        {
+          "id": "L-LINDEX-STRETCH-E1",
+          "text": "545 44 24 23 45",
+          "focus": "4 5"
+        },
+        {
+          "id": "L-LINDEX-STRETCH-E2",
+          "text": "41 24 255 24",
+          "focus": "4 5"
+        },
+        {
+          "id": "L-LINDEX-STRETCH-E3",
+          "text": "44 44 122 45 45",
+          "focus": "4 5"
+        }
+      ],
+      "outcome": "Stretches to the number row and returns to home without drift.",
+      "related": [
+        "L-LINDEX-HOME",
+        "L-LINDEX-UP",
+        "L-LINDEX-DOWN"
+      ],
+      "criteria": {
+        "minAccuracy": 92,
+        "minWpm": 33,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 85,
+      "order": 24
+    },
+    {
+      "id": "L-LPINKY-DOWN",
+      "name": "Left pinky · downward reach",
+      "description": "Isolate the left pinky on \"z\", \"x\", \"c\", \"v\", \"b\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 5,
+      "fingers": [
+        "LPINKY"
+      ],
+      "movements": [
+        "down"
+      ],
+      "keys": [
+        "z",
+        "x",
+        "c",
+        "v",
+        "b"
+      ],
+      "exercises": [
+        {
+          "id": "L-LPINKY-DOWN-E1",
+          "text": "vx bv zx zvxc",
+          "focus": "z"
+        },
+        {
+          "id": "L-LPINKY-DOWN-E2",
+          "text": "zb bz bz zxz xxzz cxzz",
+          "focus": "z"
+        },
+        {
+          "id": "L-LPINKY-DOWN-E3",
+          "text": "zz bxxc zc zv bzv",
+          "focus": "z"
+        }
+      ],
+      "outcome": "Reaches the bottom row and returns to home cleanly.",
+      "related": [
+        "L-LPINKY-HOME",
+        "L-LPINKY-UP",
+        "L-LPINKY-STRETCH"
+      ],
+      "criteria": {
+        "minAccuracy": 92,
+        "minWpm": 33,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 85,
+      "order": 25
+    },
+    {
+      "id": "L-LRING-UP",
+      "name": "Left ring · upward reach",
+      "description": "Isolate the left ring on \"w\", \"q\", \"e\", \"r\", \"t\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 5,
+      "fingers": [
+        "LRING"
+      ],
+      "movements": [
+        "up"
+      ],
+      "keys": [
+        "w",
+        "q",
+        "e",
+        "r",
+        "t"
+      ],
+      "exercises": [
+        {
+          "id": "L-LRING-UP-E1",
+          "text": "qre qwe wtwe we wtet",
+          "focus": "w"
+        },
+        {
+          "id": "L-LRING-UP-E2",
+          "text": "twwr wt qw wwt",
+          "focus": "w"
+        },
+        {
+          "id": "L-LRING-UP-E3",
+          "text": "wwtw ww rwqw qett wqw",
+          "focus": "w"
+        }
+      ],
+      "outcome": "Reaches one row up and returns to home without looking down.",
+      "related": [
+        "L-LRING-HOME",
+        "L-LRING-DOWN",
+        "L-LRING-STRETCH"
+      ],
+      "criteria": {
+        "minAccuracy": 92,
+        "minWpm": 33,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 85,
+      "order": 26
+    },
+    {
+      "id": "L-RINDEX-STRETCH",
+      "name": "Right index · number-row stretch",
+      "description": "Isolate the right index on \"6\", \"7\", \"8\", \"9\", \"0\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 5,
+      "fingers": [
+        "RINDEX"
+      ],
+      "movements": [
+        "stretch"
+      ],
+      "keys": [
+        "6",
+        "7",
+        "8",
+        "9",
+        "0"
+      ],
+      "exercises": [
+        {
+          "id": "L-RINDEX-STRETCH-E1",
+          "text": "77 078 76 76 778",
+          "focus": "6 7"
+        },
+        {
+          "id": "L-RINDEX-STRETCH-E2",
+          "text": "677 066 77 798 698",
+          "focus": "6 7"
+        },
+        {
+          "id": "L-RINDEX-STRETCH-E3",
+          "text": "07 77 06 97 87",
+          "focus": "6 7"
+        }
+      ],
+      "outcome": "Stretches to the number row and returns to home without drift.",
+      "related": [
+        "L-RINDEX-HOME",
+        "L-RINDEX-UP",
+        "L-RINDEX-DOWN"
+      ],
+      "criteria": {
+        "minAccuracy": 92,
+        "minWpm": 33,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 85,
+      "order": 27
+    },
+    {
+      "id": "L-RPINKY-DOWN",
+      "name": "Right pinky · downward reach",
+      "description": "Isolate the right pinky on \"/\", \"n\", \"m\", \",\", \".\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 5,
+      "fingers": [
+        "RPINKY"
+      ],
+      "movements": [
+        "down"
+      ],
+      "keys": [
+        "/",
+        "n",
+        "m",
+        ",",
+        "."
+      ],
+      "exercises": [
+        {
+          "id": "L-RPINKY-DOWN-E1",
+          "text": "/mm /,/ nm /.,",
+          "focus": "/"
+        },
+        {
+          "id": "L-RPINKY-DOWN-E2",
+          "text": ",nn/ /mm /n. /n.",
+          "focus": "/"
+        },
+        {
+          "id": "L-RPINKY-DOWN-E3",
+          "text": "//, ,m. .n// n, // nm",
+          "focus": "/"
+        }
+      ],
+      "outcome": "Reaches the bottom row and returns to home cleanly.",
+      "related": [
+        "L-RPINKY-HOME",
+        "L-RPINKY-UP",
+        "L-RPINKY-STRETCH"
+      ],
+      "criteria": {
+        "minAccuracy": 92,
+        "minWpm": 33,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 85,
+      "order": 28
+    },
+    {
+      "id": "L-RRING-UP",
+      "name": "Right ring · upward reach",
+      "description": "Isolate the right ring on \"o\", \"y\", \"u\", \"i\", \"p\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 5,
+      "fingers": [
+        "RRING"
+      ],
+      "movements": [
+        "up"
+      ],
+      "keys": [
+        "o",
+        "y",
+        "u",
+        "i",
+        "p"
+      ],
+      "exercises": [
+        {
+          "id": "L-RRING-UP-E1",
+          "text": "oou opip yo oouy pyiy oyo",
+          "focus": "o"
+        },
+        {
+          "id": "L-RRING-UP-E2",
+          "text": "ii ouou uuoo uooy",
+          "focus": "o"
+        },
+        {
+          "id": "L-RRING-UP-E3",
+          "text": "opi oopp uooi uiyp oup",
+          "focus": "o"
+        }
+      ],
+      "outcome": "Reaches one row up and returns to home without looking down.",
+      "related": [
+        "L-RRING-HOME",
+        "L-RRING-DOWN",
+        "L-RRING-STRETCH"
+      ],
+      "criteria": {
+        "minAccuracy": 92,
+        "minWpm": 33,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 85,
+      "order": 29
+    },
+    {
+      "id": "L-SKILL-DIGRAPH",
+      "name": "High-frequency digraphs",
+      "description": "Drill the two-letter pairs that make up most English text (th, he, in, er, an, re) until they are single motions rather than two decisions.",
+      "category": "pattern",
+      "level": 5,
+      "fingers": [
+        "LPINKY",
+        "LRING",
+        "LMIDDLE",
+        "LINDEX",
+        "RINDEX",
+        "RMIDDLE",
+        "RRING",
+        "RPINKY"
+      ],
+      "movements": [
+        "digraph"
+      ],
+      "keys": [
+        "a",
+        "s",
+        "d",
+        "f",
+        "g",
+        "h",
+        "j",
+        "k",
+        "l",
+        "e",
+        "r",
+        "t",
+        "i",
+        "o",
+        "n",
+        "u"
+      ],
+      "exercises": [
+        {
+          "id": "L-SKILL-DIGRAPH-E1",
+          "text": "th he in er an re on at en nd ti es or te of ed",
+          "focus": "a s d f g h j k"
+        },
+        {
+          "id": "L-SKILL-DIGRAPH-E2",
+          "text": "th th he he in in er er an an re re on on at at",
+          "focus": "a s d f g h j k"
+        },
+        {
+          "id": "L-SKILL-DIGRAPH-E3",
+          "text": "the then there these those other rather either",
+          "focus": "a s d f g h j k"
+        },
+        {
+          "id": "L-SKILL-DIGRAPH-E4",
+          "text": "think thing thank their there they them then th",
+          "focus": "a s d f g h j k"
+        }
+      ],
+      "outcome": "Types common pairs as one unit, raising speed without dropping accuracy.",
+      "related": [
+        "L-SKILL-TRIGRAPH",
+        "L-SKILL-ROLL"
+      ],
+      "criteria": {
+        "minAccuracy": 92,
+        "minWpm": 33,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 110,
+      "order": 30
+    },
+    {
+      "id": "L-SKILL-DOUBLE",
+      "name": "Double letters",
+      "description": "The same key twice in a row needs a controlled double tap, not a held key. Doubles are where fast typists lose accuracy first.",
+      "category": "pattern",
+      "level": 5,
+      "fingers": [
+        "LPINKY",
+        "LRING",
+        "LMIDDLE",
+        "LINDEX",
+        "RINDEX",
+        "RMIDDLE",
+        "RRING",
+        "RPINKY"
+      ],
+      "movements": [
+        "double-letter"
+      ],
+      "keys": [
+        "a",
+        "s",
+        "d",
+        "f",
+        "l",
+        "k",
+        "e",
+        "o",
+        "t",
+        "n"
+      ],
+      "exercises": [
+        {
+          "id": "L-SKILL-DOUBLE-E1",
+          "text": "all off see too add odd ill egg ask less tell",
+          "focus": "a s d f l k e o"
+        },
+        {
+          "id": "L-SKILL-DOUBLE-E2",
+          "text": "letter better summer dinner coffee running fill",
+          "focus": "a s d f l k e o"
+        },
+        {
+          "id": "L-SKILL-DOUBLE-E3",
+          "text": "sheet steel speed sweet greet fleet street need",
+          "focus": "a s d f l k e o"
+        },
+        {
+          "id": "L-SKILL-DOUBLE-E4",
+          "text": "happen sudden common cotton lesson button middle",
+          "focus": "a s d f l k e o"
+        }
+      ],
+      "outcome": "Reproduces doubled letters at speed without dropping or tripling them.",
+      "related": [
+        "L-SKILL-ROLL",
+        "L-SKILL-DIGRAPH"
+      ],
+      "criteria": {
+        "minAccuracy": 92,
+        "minWpm": 33,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 110,
+      "order": 31
+    },
+    {
+      "id": "L-SKILL-ROLL",
+      "name": "Same-hand rolls",
+      "description": "Roll through neighbouring fingers of one hand in sequence, outside-in and inside-out. Rolls are the fastest and least error-prone same-hand motion.",
+      "category": "pattern",
+      "level": 5,
+      "fingers": [
+        "LPINKY",
+        "LRING",
+        "LMIDDLE",
+        "LINDEX",
+        "RINDEX",
+        "RMIDDLE",
+        "RRING",
+        "RPINKY"
+      ],
+      "movements": [
+        "same-hand-roll"
+      ],
+      "keys": [
+        "a",
+        "s",
+        "d",
+        "f",
+        "j",
+        "k",
+        "l",
+        "e",
+        "r",
+        "u",
+        "i",
+        "o"
+      ],
+      "exercises": [
+        {
+          "id": "L-SKILL-ROLL-E1",
+          "text": "were tree free deer feed seed keel look pool",
+          "focus": "a s d f j k l e"
+        },
+        {
+          "id": "L-SKILL-ROLL-E2",
+          "text": "drew asks adds sass dads lulu kiki juju pool",
+          "focus": "a s d f j k l e"
+        },
+        {
+          "id": "L-SKILL-ROLL-E3",
+          "text": "sold fold gold held weld field shield juiced",
+          "focus": "a s d f j k l e"
+        },
+        {
+          "id": "L-SKILL-ROLL-E4",
+          "text": "jerk kelp self idle older order udder inner",
+          "focus": "a s d f j k l e"
+        }
+      ],
+      "outcome": "Chains three or four same-hand keys with one flowing motion instead of discrete stabs.",
+      "related": [
+        "L-SKILL-ALTERNATION",
+        "L-SKILL-DOUBLE"
+      ],
+      "criteria": {
+        "minAccuracy": 92,
+        "minWpm": 33,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 110,
+      "order": 32
+    },
+    {
+      "id": "L-LMIDDLE-STRETCH",
+      "name": "Left middle · number-row stretch",
+      "description": "Isolate the left middle on \"3\", \"1\", \"2\", \"4\", \"5\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 6,
+      "fingers": [
+        "LMIDDLE"
+      ],
+      "movements": [
+        "stretch"
+      ],
+      "keys": [
+        "3",
+        "1",
+        "2",
+        "4",
+        "5"
+      ],
+      "exercises": [
+        {
+          "id": "L-LMIDDLE-STRETCH-E1",
+          "text": "112 442 33 135",
+          "focus": "3"
+        },
+        {
+          "id": "L-LMIDDLE-STRETCH-E2",
+          "text": "133 11 55 353 331",
+          "focus": "3"
+        },
+        {
+          "id": "L-LMIDDLE-STRETCH-E3",
+          "text": "34 33 232 33 33",
+          "focus": "3"
+        }
+      ],
+      "outcome": "Stretches to the number row and returns to home without drift.",
+      "related": [
+        "L-LMIDDLE-HOME",
+        "L-LMIDDLE-UP",
+        "L-LMIDDLE-DOWN"
+      ],
+      "criteria": {
+        "minAccuracy": 91,
+        "minWpm": 36,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 93,
+      "order": 33
+    },
+    {
+      "id": "L-LPINKY-UP",
+      "name": "Left pinky · upward reach",
+      "description": "Isolate the left pinky on \"q\", \"w\", \"e\", \"r\", \"t\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 6,
+      "fingers": [
+        "LPINKY"
+      ],
+      "movements": [
+        "up"
+      ],
+      "keys": [
+        "q",
+        "w",
+        "e",
+        "r",
+        "t"
+      ],
+      "exercises": [
+        {
+          "id": "L-LPINKY-UP-E1",
+          "text": "rreq twq qqw qrq re",
+          "focus": "q"
+        },
+        {
+          "id": "L-LPINKY-UP-E2",
+          "text": "etwq rtqe rtqq qe",
+          "focus": "q"
+        },
+        {
+          "id": "L-LPINKY-UP-E3",
+          "text": "tw tqre ww qtq",
+          "focus": "q"
+        }
+      ],
+      "outcome": "Reaches one row up and returns to home without looking down.",
+      "related": [
+        "L-LPINKY-HOME",
+        "L-LPINKY-DOWN",
+        "L-LPINKY-STRETCH"
+      ],
+      "criteria": {
+        "minAccuracy": 91,
+        "minWpm": 36,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 93,
+      "order": 34
+    },
+    {
+      "id": "L-RMIDDLE-STRETCH",
+      "name": "Right middle · number-row stretch",
+      "description": "Isolate the right middle on \"8\", \"6\", \"7\", \"9\", \"0\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 6,
+      "fingers": [
+        "RMIDDLE"
+      ],
+      "movements": [
+        "stretch"
+      ],
+      "keys": [
+        "8",
+        "6",
+        "7",
+        "9",
+        "0"
+      ],
+      "exercises": [
+        {
+          "id": "L-RMIDDLE-STRETCH-E1",
+          "text": "87 97 998 68 788",
+          "focus": "8"
+        },
+        {
+          "id": "L-RMIDDLE-STRETCH-E2",
+          "text": "987 78 07 08 868",
+          "focus": "8"
+        },
+        {
+          "id": "L-RMIDDLE-STRETCH-E3",
+          "text": "797 78 78 96 797",
+          "focus": "8"
+        }
+      ],
+      "outcome": "Stretches to the number row and returns to home without drift.",
+      "related": [
+        "L-RMIDDLE-HOME",
+        "L-RMIDDLE-UP",
+        "L-RMIDDLE-DOWN"
+      ],
+      "criteria": {
+        "minAccuracy": 91,
+        "minWpm": 36,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 93,
+      "order": 35
+    },
+    {
+      "id": "L-RPINKY-UP",
+      "name": "Right pinky · upward reach",
+      "description": "Isolate the right pinky on \"p\", \"y\", \"u\", \"i\", \"o\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 6,
+      "fingers": [
+        "RPINKY"
+      ],
+      "movements": [
+        "up"
+      ],
+      "keys": [
+        "p",
+        "y",
+        "u",
+        "i",
+        "o"
+      ],
+      "exercises": [
+        {
+          "id": "L-RPINKY-UP-E1",
+          "text": "ppyi ppup ppyp uy poi yoi",
+          "focus": "p"
+        },
+        {
+          "id": "L-RPINKY-UP-E2",
+          "text": "iip yuyu yip uiou yppy pio",
+          "focus": "p"
+        },
+        {
+          "id": "L-RPINKY-UP-E3",
+          "text": "iop pu pyop oio pypy",
+          "focus": "p"
+        }
+      ],
+      "outcome": "Reaches one row up and returns to home without looking down.",
+      "related": [
+        "L-RPINKY-HOME",
+        "L-RPINKY-DOWN",
+        "L-RPINKY-STRETCH"
+      ],
+      "criteria": {
+        "minAccuracy": 91,
+        "minWpm": 36,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 93,
+      "order": 36
+    },
+    {
+      "id": "L-SKILL-CROSSOVER",
+      "name": "Index crossover",
+      "description": "Pass between the index fingers across the centre column (g and h). This is the only place the two hands share a boundary, and the most common source of silent index errors.",
+      "category": "pattern",
+      "level": 6,
+      "fingers": [
+        "LINDEX",
+        "RINDEX"
+      ],
+      "movements": [
+        "crossover"
+      ],
+      "keys": [
+        "f",
+        "g",
+        "h",
+        "j",
+        "t",
+        "y",
+        "b",
+        "n",
+        "v",
+        "m"
+      ],
+      "exercises": [
+        {
+          "id": "L-SKILL-CROSSOVER-E1",
+          "text": "gh hg ghg hgh gh hg ght hgh gh hg jhg fgh",
+          "focus": "f g h j t y b n"
+        },
+        {
+          "id": "L-SKILL-CROSSOVER-E2",
+          "text": "high thigh thing hung hang bang gong hong hg",
+          "focus": "f g h j t y b n"
+        },
+        {
+          "id": "L-SKILL-CROSSOVER-E3",
+          "text": "gnat hang hinge gh gh hg hg gb nh hb ng gbn",
+          "focus": "f g h j t y b n"
+        },
+        {
+          "id": "L-SKILL-CROSSOVER-E4",
+          "text": "bg nh hb ng gbn gnh gbh hbg gnb nhb hgn bhg",
+          "focus": "f g h j t y b n"
+        }
+      ],
+      "outcome": "Hits g and h with the correct index finger every time, without crossing hands.",
+      "related": [
+        "L-SKILL-ALTERNATION",
+        "L-SKILL-DIGRAPH"
+      ],
+      "criteria": {
+        "minAccuracy": 91,
+        "minWpm": 36,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 120,
+      "order": 37
+    },
+    {
+      "id": "L-SKILL-SHIFT",
+      "name": "Shift reach",
+      "description": "Hold shift with the pinky of the resting hand, then type the capital with the opposite hand. Never type a capital with a shift key on the same side.",
+      "category": "pattern",
+      "level": 6,
+      "fingers": [
+        "LPINKY",
+        "RPINKY"
+      ],
+      "movements": [
+        "shift-reach"
+      ],
+      "keys": [
+        "A",
+        "S",
+        "D",
+        "F",
+        "J",
+        "K",
+        "L",
+        "Q",
+        "W",
+        "E",
+        "U",
+        "I",
+        "O",
+        "P"
+      ],
+      "exercises": [
+        {
+          "id": "L-SKILL-SHIFT-E1",
+          "text": "Al So Di Fa Ju Ke Li Pa Quad Went Us Out Pip",
+          "focus": "A S D F J K L Q"
+        },
+        {
+          "id": "L-SKILL-SHIFT-E2",
+          "text": "AS DF JK LQ WE UI OP AS DF JK LQ WE UI OP QU",
+          "focus": "A S D F J K L Q"
+        },
+        {
+          "id": "L-SKILL-SHIFT-E3",
+          "text": "Abe Sue Dora Finn Jose Kate Lena Paul Quinn Wil",
+          "focus": "A S D F J K L Q"
+        },
+        {
+          "id": "L-SKILL-SHIFT-E4",
+          "text": "Ed If Ox Up Am Be Do Go Hi In Jo Ki La My No",
+          "focus": "A S D F J K L Q"
+        }
+      ],
+      "outcome": "Produces capitals using opposite-hand shift without slowing the whole word.",
+      "related": [
+        "L-SKILL-ALTERNATION",
+        "L-SKILL-WORDS"
+      ],
+      "criteria": {
+        "minAccuracy": 91,
+        "minWpm": 36,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 120,
+      "order": 38
+    },
+    {
+      "id": "L-SKILL-TRIGRAPH",
+      "name": "High-frequency trigraphs",
+      "description": "Extend the digraph drills to three-letter groups (the, and, ing, ion, ent, her) which occur so often that a stumble in one costs whole words.",
+      "category": "pattern",
+      "level": 6,
+      "fingers": [
+        "LPINKY",
+        "LRING",
+        "LMIDDLE",
+        "LINDEX",
+        "RINDEX",
+        "RMIDDLE",
+        "RRING",
+        "RPINKY"
+      ],
+      "movements": [
+        "trigraph"
+      ],
+      "keys": [
+        "a",
+        "s",
+        "d",
+        "f",
+        "g",
+        "h",
+        "j",
+        "k",
+        "l",
+        "e",
+        "r",
+        "t",
+        "i",
+        "o",
+        "n",
+        "u",
+        "w"
+      ],
+      "exercises": [
+        {
+          "id": "L-SKILL-TRIGRAPH-E1",
+          "text": "the and ing ion ent her ter ere hat tha for",
+          "focus": "a s d f g h j k"
+        },
+        {
+          "id": "L-SKILL-TRIGRAPH-E2",
+          "text": "the and ing ion ent her the and ing ion ent",
+          "focus": "a s d f g h j k"
+        },
+        {
+          "id": "L-SKILL-TRIGRAPH-E3",
+          "text": "thing going doing being thank think there their",
+          "focus": "a s d f g h j k"
+        },
+        {
+          "id": "L-SKILL-TRIGRAPH-E4",
+          "text": "nation action station mention section question",
+          "focus": "a s d f g h j k"
+        }
+      ],
+      "outcome": "Produces the most common three-letter groups without a pause at any boundary.",
+      "related": [
+        "L-SKILL-DIGRAPH",
+        "L-SKILL-WORDS"
+      ],
+      "criteria": {
+        "minAccuracy": 91,
+        "minWpm": 36,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 120,
+      "order": 39
+    },
+    {
+      "id": "L-SKILL-WORDS",
+      "name": "Common words",
+      "description": "Whole high-frequency words typed as single chunks. The top 100 English words cover roughly half of all text, so these patterns pay back immediately.",
+      "category": "pattern",
+      "level": 6,
+      "fingers": [
+        "LPINKY",
+        "LRING",
+        "LMIDDLE",
+        "LINDEX",
+        "RINDEX",
+        "RMIDDLE",
+        "RRING",
+        "RPINKY"
+      ],
+      "movements": [
+        "common-word"
+      ],
+      "keys": [
+        "a",
+        "s",
+        "d",
+        "f",
+        "g",
+        "h",
+        "j",
+        "k",
+        "l",
+        "e",
+        "r",
+        "t",
+        "i",
+        "o",
+        "n",
+        "u",
+        "w",
+        "v"
+      ],
+      "exercises": [
+        {
+          "id": "L-SKILL-WORDS-E1",
+          "text": "the of and to in is you that it he was for on",
+          "focus": "a s d f g h j k"
+        },
+        {
+          "id": "L-SKILL-WORDS-E2",
+          "text": "are as with his they at be this have from one",
+          "focus": "a s d f g h j k"
+        },
+        {
+          "id": "L-SKILL-WORDS-E3",
+          "text": "had by hot word but what some we can out other",
+          "focus": "a s d f g h j k"
+        },
+        {
+          "id": "L-SKILL-WORDS-E4",
+          "text": "were all there when up use your how said an each",
+          "focus": "a s d f g h j k"
+        }
+      ],
+      "outcome": "Types the most common English words without searching for individual letters.",
+      "related": [
+        "L-SKILL-DIGRAPH",
+        "L-SKILL-COORDINATION"
+      ],
+      "criteria": {
+        "minAccuracy": 91,
+        "minWpm": 36,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 120,
+      "order": 40
+    },
+    {
+      "id": "L-TRANSITION-LMIDDLE-LINDEX",
+      "name": "Left middle → Left index transitions",
+      "description": "Move back and forth between left middle and left index across home, top and bottom rows without breaking rhythm.",
+      "category": "finger-combination",
+      "level": 6,
+      "fingers": [
+        "LMIDDLE",
+        "LINDEX"
+      ],
+      "movements": [
+        "home",
+        "up",
+        "down"
+      ],
+      "keys": [
+        "c",
+        "d",
+        "e",
+        "v",
+        "f",
+        "r"
+      ],
+      "exercises": [
+        {
+          "id": "L-TRANSITION-LMIDDLE-LINDEX-E1",
+          "text": "cecd rdcv rdvf ddfv rr cffc",
+          "focus": "c d e v f r"
+        },
+        {
+          "id": "L-TRANSITION-LMIDDLE-LINDEX-E2",
+          "text": "rfd rc rr ee fer",
+          "focus": "c d e v f r"
+        },
+        {
+          "id": "L-TRANSITION-LMIDDLE-LINDEX-E3",
+          "text": "de er dde df dvcr cec",
+          "focus": "c d e v f r"
+        }
+      ],
+      "outcome": "Smooth, even timing when alternating between the left middle and the left index.",
+      "related": [
+        "L-LMIDDLE-HOME",
+        "L-LINDEX-HOME"
+      ],
+      "criteria": {
+        "minAccuracy": 91,
+        "minWpm": 36,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 108,
+      "order": 41
+    },
+    {
+      "id": "L-TRANSITION-RINDEX-RMIDDLE",
+      "name": "Right index → Right middle transitions",
+      "description": "Move back and forth between right index and right middle across home, top and bottom rows without breaking rhythm.",
+      "category": "finger-combination",
+      "level": 6,
+      "fingers": [
+        "RINDEX",
+        "RMIDDLE"
+      ],
+      "movements": [
+        "home",
+        "up",
+        "down"
+      ],
+      "keys": [
+        "m",
+        "j",
+        "u",
+        ",",
+        "k",
+        "i"
+      ],
+      "exercises": [
+        {
+          "id": "L-TRANSITION-RINDEX-RMIDDLE-E1",
+          "text": "iuju k,i ,m kjmu ,ijj ju ki,",
+          "focus": "m j u , k i"
+        },
+        {
+          "id": "L-TRANSITION-RINDEX-RMIDDLE-E2",
+          "text": "kum, mu,k j, iimi immj ijiu",
+          "focus": "m j u , k i"
+        },
+        {
+          "id": "L-TRANSITION-RINDEX-RMIDDLE-E3",
+          "text": "mj ijku iu im, ,, mij, jki",
+          "focus": "m j u , k i"
+        }
+      ],
+      "outcome": "Smooth, even timing when alternating between the right index and the right middle.",
+      "related": [
+        "L-RINDEX-HOME",
+        "L-RMIDDLE-HOME"
+      ],
+      "criteria": {
+        "minAccuracy": 91,
+        "minWpm": 36,
+        "attempts": 3,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 108,
+      "order": 42
+    },
+    {
+      "id": "L-LRING-STRETCH",
+      "name": "Left ring · number-row stretch",
+      "description": "Isolate the left ring on \"2\", \"1\", \"3\", \"4\", \"5\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 7,
+      "fingers": [
+        "LRING"
+      ],
+      "movements": [
+        "stretch"
+      ],
+      "keys": [
+        "2",
+        "1",
+        "3",
+        "4",
+        "5"
+      ],
+      "exercises": [
+        {
+          "id": "L-LRING-STRETCH-E1",
+          "text": "521 32 12 32",
+          "focus": "2"
+        },
+        {
+          "id": "L-LRING-STRETCH-E2",
+          "text": "224 23 22 51 42",
+          "focus": "2"
+        },
+        {
+          "id": "L-LRING-STRETCH-E3",
+          "text": "314 12 11 24 22",
+          "focus": "2"
+        }
+      ],
+      "outcome": "Stretches to the number row and returns to home without drift.",
+      "related": [
+        "L-LRING-HOME",
+        "L-LRING-UP",
+        "L-LRING-DOWN"
+      ],
+      "criteria": {
+        "minAccuracy": 90,
+        "minWpm": 39,
+        "attempts": 4,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 101,
+      "order": 43
+    },
+    {
+      "id": "L-RPINKY-OUTER",
+      "name": "Right pinky · outer-column reach",
+      "description": "Isolate the right pinky on \"[\", \"]\", \"'\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 7,
+      "fingers": [
+        "RPINKY"
+      ],
+      "movements": [
+        "outer"
+      ],
+      "keys": [
+        "[",
+        "]",
+        "'"
+      ],
+      "exercises": [
+        {
+          "id": "L-RPINKY-OUTER-E1",
+          "text": "]] [[ '[ [' ]''",
+          "focus": "[ ] '"
+        },
+        {
+          "id": "L-RPINKY-OUTER-E2",
+          "text": "]][ [' [] ''[",
+          "focus": "[ ] '"
+        },
+        {
+          "id": "L-RPINKY-OUTER-E3",
+          "text": "]] '] ]' ']' ']",
+          "focus": "[ ] '"
+        }
+      ],
+      "outcome": "Stretches the pinky outward without rotating the whole hand.",
+      "related": [
+        "L-RPINKY-HOME",
+        "L-RPINKY-UP",
+        "L-RPINKY-DOWN"
+      ],
+      "criteria": {
+        "minAccuracy": 90,
+        "minWpm": 39,
+        "attempts": 4,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 101,
+      "order": 44
+    },
+    {
+      "id": "L-RRING-STRETCH",
+      "name": "Right ring · number-row stretch",
+      "description": "Isolate the right ring on \"9\", \"6\", \"7\", \"8\", \"0\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 7,
+      "fingers": [
+        "RRING"
+      ],
+      "movements": [
+        "stretch"
+      ],
+      "keys": [
+        "9",
+        "6",
+        "7",
+        "8",
+        "0"
+      ],
+      "exercises": [
+        {
+          "id": "L-RRING-STRETCH-E1",
+          "text": "660 99 99 790",
+          "focus": "9"
+        },
+        {
+          "id": "L-RRING-STRETCH-E2",
+          "text": "699 06 69 68",
+          "focus": "9"
+        },
+        {
+          "id": "L-RRING-STRETCH-E3",
+          "text": "099 068 667 09 967",
+          "focus": "9"
+        }
+      ],
+      "outcome": "Stretches to the number row and returns to home without drift.",
+      "related": [
+        "L-RRING-HOME",
+        "L-RRING-UP",
+        "L-RRING-DOWN"
+      ],
+      "criteria": {
+        "minAccuracy": 90,
+        "minWpm": 39,
+        "attempts": 4,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 101,
+      "order": 45
+    },
+    {
+      "id": "L-SKILL-NUMBERS",
+      "name": "Number row integration",
+      "description": "Stretch to the number row while the rest of the hand holds home, then return. Numbers break rhythm more than any other row because the reach is two rows deep.",
+      "category": "pattern",
+      "level": 7,
+      "fingers": [
+        "LPINKY",
+        "LRING",
+        "LMIDDLE",
+        "LINDEX",
+        "RINDEX",
+        "RMIDDLE",
+        "RRING",
+        "RPINKY"
+      ],
+      "movements": [
+        "stretch"
+      ],
+      "keys": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "0",
+        "a",
+        "s",
+        "d",
+        "f",
+        "j",
+        "k",
+        "l",
+        ";"
+      ],
+      "exercises": [
+        {
+          "id": "L-SKILL-NUMBERS-E1",
+          "text": "1a 2s 3d 4f 5f 6j 7j 8k 9l 0; 1a 2s 3d 4f",
+          "focus": "1 2 3 4 5 6 7 8"
+        },
+        {
+          "id": "L-SKILL-NUMBERS-E2",
+          "text": "11 22 33 44 55 66 77 88 99 00 12 34 56 78 90",
+          "focus": "1 2 3 4 5 6 7 8"
+        },
+        {
+          "id": "L-SKILL-NUMBERS-E3",
+          "text": "a1 s2 d3 f4 j7 k8 l9 ;0 fa jf dk sl a; 4f 7j",
+          "focus": "1 2 3 4 5 6 7 8"
+        },
+        {
+          "id": "L-SKILL-NUMBERS-E4",
+          "text": "123 456 789 0 12 34 56 78 90 f4 j7 d3 k8 s2",
+          "focus": "1 2 3 4 5 6 7 8"
+        }
+      ],
+      "outcome": "Reaches any number-row key and returns to home without losing the anchor.",
+      "related": [
+        "L-SKILL-PUNCTUATION",
+        "L-SKILL-COORDINATION"
+      ],
+      "criteria": {
+        "minAccuracy": 90,
+        "minWpm": 39,
+        "attempts": 4,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 130,
+      "order": 46
+    },
+    {
+      "id": "L-SKILL-PUNCTUATION",
+      "name": "Punctuation and symbols",
+      "description": "Commas, periods, semicolons, quotes and brackets, all reached from home. Punctuation is where pinky drift shows up as sloppy sentences.",
+      "category": "pattern",
+      "level": 7,
+      "fingers": [
+        "LPINKY",
+        "RINDEX",
+        "RMIDDLE",
+        "RRING",
+        "RPINKY"
+      ],
+      "movements": [
+        "outer",
+        "down",
+        "shift-reach"
+      ],
+      "keys": [
+        ",",
+        ".",
+        ";",
+        "'",
+        "/",
+        "[",
+        "]",
+        "a",
+        "s",
+        "d",
+        "f",
+        "j",
+        "k",
+        "l"
+      ],
+      "exercises": [
+        {
+          "id": "L-SKILL-PUNCTUATION-E1",
+          "text": "as, if; do. we: it, he. so; an, at. be, my; no.",
+          "focus": ", . ; ' / [ ] a"
+        },
+        {
+          "id": "L-SKILL-PUNCTUATION-E2",
+          "text": "red, blue; green. gold, grey; teal. ash, oil; eel.",
+          "focus": ", . ; ' / [ ] a"
+        },
+        {
+          "id": "L-SKILL-PUNCTUATION-E3",
+          "text": "ask, said. read; lead. fade, dead; heed. look, jade.",
+          "focus": ", . ; ' / [ ] a"
+        },
+        {
+          "id": "L-SKILL-PUNCTUATION-E4",
+          "text": "a; s. d, f; j. k, l; a. s, d; f. j, k; l. a, f;",
+          "focus": ", . ; ' / [ ] a"
+        }
+      ],
+      "outcome": "Reaches comma, period and semicolon accurately with the correct finger.",
+      "related": [
+        "L-SKILL-NUMBERS",
+        "L-SKILL-COORDINATION"
+      ],
+      "criteria": {
+        "minAccuracy": 90,
+        "minWpm": 39,
+        "attempts": 4,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 130,
+      "order": 47
+    },
+    {
+      "id": "L-TRANSITION-LRING-LMIDDLE",
+      "name": "Left ring → Left middle transitions",
+      "description": "Move back and forth between left ring and left middle across home, top and bottom rows without breaking rhythm.",
+      "category": "finger-combination",
+      "level": 7,
+      "fingers": [
+        "LRING",
+        "LMIDDLE"
+      ],
+      "movements": [
+        "home",
+        "up",
+        "down"
+      ],
+      "keys": [
+        "x",
+        "s",
+        "w",
+        "c",
+        "d",
+        "e"
+      ],
+      "exercises": [
+        {
+          "id": "L-TRANSITION-LRING-LMIDDLE-E1",
+          "text": "wxdw escd ed we scw es",
+          "focus": "x s w c d e"
+        },
+        {
+          "id": "L-TRANSITION-LRING-LMIDDLE-E2",
+          "text": "csw cw xd wssd dww edcx sccw",
+          "focus": "x s w c d e"
+        },
+        {
+          "id": "L-TRANSITION-LRING-LMIDDLE-E3",
+          "text": "eew cxd xsc wsex xede",
+          "focus": "x s w c d e"
+        }
+      ],
+      "outcome": "Smooth, even timing when alternating between the left ring and the left middle.",
+      "related": [
+        "L-LRING-HOME",
+        "L-LMIDDLE-HOME"
+      ],
+      "criteria": {
+        "minAccuracy": 90,
+        "minWpm": 39,
+        "attempts": 4,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 116,
+      "order": 48
+    },
+    {
+      "id": "L-TRANSITION-RMIDDLE-RRING",
+      "name": "Right middle → Right ring transitions",
+      "description": "Move back and forth between right middle and right ring across home, top and bottom rows without breaking rhythm.",
+      "category": "finger-combination",
+      "level": 7,
+      "fingers": [
+        "RMIDDLE",
+        "RRING"
+      ],
+      "movements": [
+        "home",
+        "up",
+        "down"
+      ],
+      "keys": [
+        ",",
+        "k",
+        "i",
+        ".",
+        "l",
+        "o"
+      ],
+      "exercises": [
+        {
+          "id": "L-TRANSITION-RMIDDLE-RRING-E1",
+          "text": ".., oil i,ik .kik l,oo ik",
+          "focus": ", k i . l o"
+        },
+        {
+          "id": "L-TRANSITION-RMIDDLE-RRING-E2",
+          "text": "kol io. ,k. lill k,k k,,",
+          "focus": ", k i . l o"
+        },
+        {
+          "id": "L-TRANSITION-RMIDDLE-RRING-E3",
+          "text": ".,o ikk .k. ,kl ko, iko l.ki",
+          "focus": ", k i . l o"
+        }
+      ],
+      "outcome": "Smooth, even timing when alternating between the right middle and the right ring.",
+      "related": [
+        "L-RMIDDLE-HOME",
+        "L-RRING-HOME"
+      ],
+      "criteria": {
+        "minAccuracy": 90,
+        "minWpm": 39,
+        "attempts": 4,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 116,
+      "order": 49
+    },
+    {
+      "id": "L-LPINKY-STRETCH",
+      "name": "Left pinky · number-row stretch",
+      "description": "Isolate the left pinky on \"1\", \"2\", \"3\", \"4\", \"5\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 8,
+      "fingers": [
+        "LPINKY"
+      ],
+      "movements": [
+        "stretch"
+      ],
+      "keys": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "exercises": [
+        {
+          "id": "L-LPINKY-STRETCH-E1",
+          "text": "155 412 515 42 31",
+          "focus": "1"
+        },
+        {
+          "id": "L-LPINKY-STRETCH-E2",
+          "text": "341 412 443 542 23",
+          "focus": "1"
+        },
+        {
+          "id": "L-LPINKY-STRETCH-E3",
+          "text": "14 44 215 11",
+          "focus": "1"
+        }
+      ],
+      "outcome": "Stretches to the number row and returns to home without drift.",
+      "related": [
+        "L-LPINKY-HOME",
+        "L-LPINKY-UP",
+        "L-LPINKY-DOWN"
+      ],
+      "criteria": {
+        "minAccuracy": 89,
+        "minWpm": 42,
+        "attempts": 4,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 109,
+      "order": 50
+    },
+    {
+      "id": "L-RPINKY-STRETCH",
+      "name": "Right pinky · number-row stretch",
+      "description": "Isolate the right pinky on \"0\", \"6\", \"7\", \"8\", \"9\" so it works alone while the rest of the hand stays planted on home row.",
+      "category": "movement-variation",
+      "level": 8,
+      "fingers": [
+        "RPINKY"
+      ],
+      "movements": [
+        "stretch"
+      ],
+      "keys": [
+        "0",
+        "6",
+        "7",
+        "8",
+        "9"
+      ],
+      "exercises": [
+        {
+          "id": "L-RPINKY-STRETCH-E1",
+          "text": "006 006 00 986 76",
+          "focus": "0"
+        },
+        {
+          "id": "L-RPINKY-STRETCH-E2",
+          "text": "060 08 77 070 78",
+          "focus": "0"
+        },
+        {
+          "id": "L-RPINKY-STRETCH-E3",
+          "text": "00 00 00 09",
+          "focus": "0"
+        }
+      ],
+      "outcome": "Stretches to the number row and returns to home without drift.",
+      "related": [
+        "L-RPINKY-HOME",
+        "L-RPINKY-UP",
+        "L-RPINKY-DOWN"
+      ],
+      "criteria": {
+        "minAccuracy": 89,
+        "minWpm": 42,
+        "attempts": 4,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 109,
+      "order": 51
+    },
+    {
+      "id": "L-SKILL-WEAK-PINKY",
+      "name": "Pinky endurance",
+      "description": "Long sustained pinky work. The pinkies have the least independent strength and the longest reach, so they fatigue and drift first.",
+      "category": "pattern",
+      "level": 8,
+      "fingers": [
+        "LPINKY",
+        "RPINKY"
+      ],
+      "movements": [
+        "home",
+        "stretch",
+        "outer"
+      ],
+      "keys": [
+        "a",
+        "q",
+        "z",
+        "1",
+        ";",
+        "p",
+        "'",
+        "/",
+        "o",
+        "s",
+        "k"
+      ],
+      "exercises": [
+        {
+          "id": "L-SKILL-WEAK-PINKY-E1",
+          "text": "aqa zqz aqa zqz qpq ;l; /;/ papa quip pulp",
+          "focus": "a q z 1 ; p ' /"
+        },
+        {
+          "id": "L-SKILL-WEAK-PINKY-E2",
+          "text": "as ask zaq aqs qaz zap lap pal lop pol oil",
+          "focus": "a q z 1 ; p ' /"
+        },
+        {
+          "id": "L-SKILL-WEAK-PINKY-E3",
+          "text": "applaq aqaq zqza qaza asas l;l; p;p; o;o;",
+          "focus": "a q z 1 ; p ' /"
+        },
+        {
+          "id": "L-SKILL-WEAK-PINKY-E4",
+          "text": "quick quiz jazz pizza plaza apple people poppy",
+          "focus": "a q z 1 ; p ' /"
+        }
+      ],
+      "outcome": "Keeps each pinky on its key for extended runs without collapsing inward.",
+      "related": [
+        "L-LPINKY-HOME",
+        "L-RPINKY-HOME",
+        "L-SKILL-COORDINATION"
+      ],
+      "criteria": {
+        "minAccuracy": 89,
+        "minWpm": 42,
+        "attempts": 4,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 140,
+      "order": 52
+    },
+    {
+      "id": "L-TRANSITION-LPINKY-LRING",
+      "name": "Left pinky → Left ring transitions",
+      "description": "Move back and forth between left pinky and left ring across home, top and bottom rows without breaking rhythm.",
+      "category": "finger-combination",
+      "level": 8,
+      "fingers": [
+        "LPINKY",
+        "LRING"
+      ],
+      "movements": [
+        "home",
+        "up",
+        "down"
+      ],
+      "keys": [
+        "z",
+        "a",
+        "q",
+        "x",
+        "s",
+        "w"
+      ],
+      "exercises": [
+        {
+          "id": "L-TRANSITION-LPINKY-LRING-E1",
+          "text": "qa sq ww swsa wxsz awx saz",
+          "focus": "z a q x s w"
+        },
+        {
+          "id": "L-TRANSITION-LPINKY-LRING-E2",
+          "text": "sz waq swa as sa aqwx wx",
+          "focus": "z a q x s w"
+        },
+        {
+          "id": "L-TRANSITION-LPINKY-LRING-E3",
+          "text": "aaz ww qaz wxsw xza",
+          "focus": "z a q x s w"
+        }
+      ],
+      "outcome": "Smooth, even timing when alternating between the left pinky and the left ring.",
+      "related": [
+        "L-LPINKY-HOME",
+        "L-LRING-HOME"
+      ],
+      "criteria": {
+        "minAccuracy": 89,
+        "minWpm": 42,
+        "attempts": 4,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 124,
+      "order": 53
+    },
+    {
+      "id": "L-TRANSITION-RRING-RPINKY",
+      "name": "Right ring → Right pinky transitions",
+      "description": "Move back and forth between right ring and right pinky across home, top and bottom rows without breaking rhythm.",
+      "category": "finger-combination",
+      "level": 8,
+      "fingers": [
+        "RRING",
+        "RPINKY"
+      ],
+      "movements": [
+        "home",
+        "up",
+        "down"
+      ],
+      "keys": [
+        ".",
+        "l",
+        "o",
+        "/",
+        ";",
+        "p"
+      ],
+      "exercises": [
+        {
+          "id": "L-TRANSITION-RRING-RPINKY-E1",
+          "text": ".pp p// p;; l/;. ;p; oo",
+          "focus": ". l o / ; p"
+        },
+        {
+          "id": "L-TRANSITION-RRING-RPINKY-E2",
+          "text": "p/o p;po ;.o /oo; pp.p /l/ o.",
+          "focus": ". l o / ; p"
+        },
+        {
+          "id": "L-TRANSITION-RRING-RPINKY-E3",
+          "text": "l.. p; ll/. l. o;",
+          "focus": ". l o / ; p"
+        }
+      ],
+      "outcome": "Smooth, even timing when alternating between the right ring and the right pinky.",
+      "related": [
+        "L-RRING-HOME",
+        "L-RPINKY-HOME"
+      ],
+      "criteria": {
+        "minAccuracy": 89,
+        "minWpm": 42,
+        "attempts": 4,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 124,
+      "order": 54
+    },
+    {
+      "id": "L-SKILL-COORDINATION",
+      "name": "Full coordination",
+      "description": "Real sentences using every finger, both hands and the space bar. This is the transfer test: everything drilled separately now has to work together at once.",
+      "category": "coordination",
+      "level": 9,
+      "fingers": [
+        "LPINKY",
+        "LRING",
+        "LMIDDLE",
+        "LINDEX",
+        "RINDEX",
+        "RMIDDLE",
+        "RRING",
+        "RPINKY"
+      ],
+      "movements": [
+        "coordination",
+        "alternation",
+        "common-word"
+      ],
+      "keys": [
+        "a",
+        "s",
+        "d",
+        "f",
+        "g",
+        "h",
+        "j",
+        "k",
+        "l",
+        "q",
+        "w",
+        "e",
+        "r",
+        "t",
+        "y",
+        "u",
+        "i",
+        "o",
+        "p",
+        "z",
+        "x",
+        "c",
+        "v",
+        "b",
+        "n",
+        "m"
+      ],
+      "exercises": [
+        {
+          "id": "L-SKILL-COORDINATION-E1",
+          "text": "the quick brown fox jumps over the lazy dog near",
+          "focus": "a s d f g h j k"
+        },
+        {
+          "id": "L-SKILL-COORDINATION-E2",
+          "text": "pack my box with five dozen liquor jugs before nine",
+          "focus": "a s d f g h j k"
+        },
+        {
+          "id": "L-SKILL-COORDINATION-E3",
+          "text": "a calm hand keeps steady rhythm through every line",
+          "focus": "a s d f g h j k"
+        },
+        {
+          "id": "L-SKILL-COORDINATION-E4",
+          "text": "when the work is even the speed will follow the hand",
+          "focus": "a s d f g h j k"
+        }
+      ],
+      "outcome": "Sustains accurate, even typing across unconstrained English text.",
+      "related": [
+        "L-SKILL-WORDS",
+        "L-SKILL-NUMBERS",
+        "L-SKILL-PUNCTUATION"
+      ],
+      "criteria": {
+        "minAccuracy": 88,
+        "minWpm": 45,
+        "attempts": 4,
+        "speedIsAdvisory": true
+      },
+      "estimatedSeconds": 150,
+      "order": 55
+    }
+  ]
+}

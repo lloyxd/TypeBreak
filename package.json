@@ -1,0 +1,26 @@
+{
+  "name": "typebreak",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "TypeBreak - an adaptive typing practice system: predefined lesson library, the BTS adaptive planner, and shared terminal + web interfaces.",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "scripts": {
+    "start": "node src/cli/index.js",
+    "cli": "node src/cli/index.js",
+    "web": "node src/server/index.js",
+    "lessons:build": "node tools/build-lessons.js",
+    "test": "node --test \"tests/*.test.js\"",
+    "test:watch": "node --test --watch \"tests/*.test.js\"",
+    "reset": "node tools/reset.js"
+  },
+  "keywords": [
+    "typing",
+    "tutor",
+    "adaptive",
+    "practice"
+  ],
+  "license": "MIT"
+}
