@@ -5,7 +5,7 @@
  */
 
 import { h, statsStrip, card, barRow, pill, empty, duration, relativeTime } from '../dom.js';
-import { api } from '../api.js';
+import { client as api } from '../client.js';
 import { navigate } from '../router.js';
 import { pageHead } from './shared.js';
 

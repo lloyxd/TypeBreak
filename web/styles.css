@@ -167,6 +167,11 @@ body {
   gap: 6px;
 }
 
+.sidebar-save {
+  font-size: 10.5px;
+  letter-spacing: 0.02em;
+}
+
 .main {
   min-width: 0;
   padding: 28px 32px 64px;
@@ -591,6 +596,16 @@ button.ghost {
 button.ghost:hover {
   background: var(--bg-inset);
   color: var(--text);
+}
+
+button.danger {
+  color: var(--red);
+  border-color: color-mix(in srgb, var(--red) 45%, transparent);
+}
+
+button.danger:hover {
+  background: color-mix(in srgb, var(--red) 12%, transparent);
+  border-color: var(--red);
 }
 
 .btn-row {

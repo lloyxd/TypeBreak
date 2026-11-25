@@ -1,21 +1,16 @@
 /**
- * Application service — the single shared surface for the CLI and the web app.
+ * Application service — the single surface the web application calls.
  *
- * Both interfaces call exactly these methods and nothing else, which is what
- * guarantees requirement 8: the same lesson library, the same scoring maths and
- * the same progress data behind both front ends.
+ * Every method returns plain JSON-serialisable data, and all learning logic
+ * (scoring, finger attribution, weakness detection, planning) lives in the
+ * sibling core modules. This file only wires them to storage and to sessions.
  *
- * Every method returns plain JSON-serialisable data. That means the web server
- * can serve a method's return value directly, and the CLI can render it, with no
- * second implementation of any rule.
+ * Runs entirely in the browser: the lesson library is fetched from a static
+ * JSON file and all progress is persisted to IndexedDB.
  */
 
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import { loadLibrary } from './library.js';
-import { Store, defaultStatePath } from './store.js';
+import { IndexedDbStore } from './db.js';
 import { TypingSession, SESSION_MODES, summarizeAttempts, formatDuration } from './engine.js';
 import {
   buildSnapshot,
@@ -27,34 +22,51 @@ import {
   dateKey,
 } from './profiles.js';
 import { assess, identifyWeaknesses, scoreLessons, planDay, buildDailyTasks, BTS_CONFIG } from './bts.js';
+import {
+  buildExport,
+  parseImport,
+  mergeStates,
+  replaceState,
+  summarise,
+  attemptKey,
+  IMPORT_MODES,
+} from './backup.js';
 import { FINGER_INFO, MOVEMENTS, fingerLabel, movementLabel, KEYBOARD_ROWS, HAND_LABEL, describeChar } from './keyboard.js';
 
-const HERE = dirname(fileURLToPath(import.meta.url));
-const PROJECT_ROOT = join(HERE, '..', '..');
-
-/** Load the predefined library from disk. */
-export function loadLibraryFromDisk(path = join(PROJECT_ROOT, 'data', 'lessons.json')) {
-  const raw = readFileSync(path, 'utf8');
-  return loadLibrary(JSON.parse(raw));
+/** Fetch the predefined library (a static asset, safe to cache offline). */
+export async function loadLibraryFromUrl(url = './data/lessons.json') {
+  const response = await fetch(url, { cache: 'no-cache' });
+  if (!response.ok) throw new Error(`Could not load the lesson library (${response.status})`);
+  return loadLibrary(await response.json());
 }
 
 export class AppService {
   /**
    * @param {object} options
-   * @param {string} [options.rootDir]  Project root (for the default data dir).
-   * @param {string} [options.statePath]
    * @param {object} [options.library]  Pre-built library (tests pass a fixture).
    * @param {() => Date} [options.now]
+   * @param {IndexedDbStore} [options.store] Injectable store (tests pass a fake).
+   * @param {() => Promise<object>} [options.libraryLoader]
    */
-  constructor({ rootDir = PROJECT_ROOT, statePath, library, now = () => new Date() } = {}) {
-    this.rootDir = rootDir;
+  constructor({ library, now = () => new Date(), store = null, libraryLoader = loadLibraryFromUrl } = {}) {
     this.now = now;
-    this.library = library ?? loadLibraryFromDisk(join(rootDir, 'data', 'lessons.json'));
-    this.store = new Store(statePath ?? defaultStatePath(rootDir), { now });
-    this.store.load();
-    /** In-flight session per interface id, so a CLI run and a browser tab do not clash. */
+    this.store = store ?? new IndexedDbStore({ now });
+    this.library = library ?? null;
+    this.libraryLoader = libraryLoader;
+    /** In-flight session per interface id, so two tabs do not clash. */
     this.sessions = new Map();
   }
+
+  /**
+   * Load the library and open the database. Must be awaited before any other
+   * method is used.
+   */
+  async init() {
+    if (!this.library) this.library = await this.libraryLoader();
+    await this.store.init();
+    return this;
+  }
+
 
   /* ---------------- state ---------------- */
 
@@ -62,15 +74,8 @@ export class AppService {
     return this.store.getState();
   }
 
-  /** Re-read state from disk — the web server does this so CLI progress shows up live. */
-  refresh() {
-    this.store.reload();
-    return this.store.getState();
-  }
-
   /** Current derived snapshot (finger profiles, streak, history, ...). */
-  snapshot({ refresh = true } = {}) {
-    if (refresh) this.store.reload();
+  snapshot() {
     return buildSnapshot({ state: this.store.getState(), library: this.library, now: this.now() });
   }
 
@@ -78,6 +83,7 @@ export class AppService {
     return this.store.getState().profile?.settings ?? {};
   }
 
+  /** Settings live in the store, so every change persists immediately. */
   updateSettings(patch) {
     return this.store.update((state) => {
       state.profile.settings = { ...state.profile.settings, ...patch };
@@ -87,7 +93,7 @@ export class AppService {
 
   resetProgress() {
     this.sessions.clear();
-    return this.store.reset();
+    return this.store.clear();
   }
 
   /* ---------------- lesson library ---------------- */
@@ -142,7 +148,7 @@ export class AppService {
   todaysPlan({ force = false } = {}) {
     const snapshot = this.snapshot();
     const plan = planDay({ ...snapshot, __library: this.library }, this.library, { now: this.now(), force });
-    // Persist the generated plan so the CLI and web agree for the rest of the day.
+    // Persist the generated plan so it stays fixed for the rest of the day.
     this.store.update((state) => {
       state.plans[plan.date] = {
         date: plan.date,
@@ -407,18 +413,12 @@ export class AppService {
     const record = entry.session.finish();
     this.sessions.delete(clientId);
 
-    const persisted = {
+    this.store.appendAttempt({
       ...record,
       recordedAt: this.now().toISOString(),
-    };
-
-    this.store.update((state) => {
-      this.store.appendAttempt(persisted);
-      return state;
     });
 
-    // Re-read so the summary reflects what was actually saved.
-    const snapshot = this.snapshot({ refresh: false });
+    const snapshot = this.snapshot();
     const evaluation = this.evaluateAttempt(record, entry.lesson);
 
     return {
@@ -456,10 +456,7 @@ export class AppService {
   }
 
   /**
-   * Score a finished attempt against a lesson's criteria without persisting it.
-   *
-   * Shared by the interactive CLI drill and `finishSession`, so a result shown
-   * in the terminal and one shown in the browser can never disagree.
+   * Score an attempt against a lesson's criteria.
    */
   evaluateAttempt(record, lesson) {
     return {
@@ -470,9 +467,9 @@ export class AppService {
   }
 
   /**
-   * Persist an attempt that was scored outside a service session — used by the
-   * CLI, which drives `TypingSession` directly for raw keystroke handling.
-   * Validates the lesson/exercise pair so only library content can be recorded.
+   * Persist an attempt scored outside a service session (an imported record or
+   * a replayed one). Validates the lesson/exercise pair so only library content
+   * can be recorded.
    */
   recordAttempt(record) {
     const lesson = this.library.require(record.lessonId);
@@ -480,11 +477,99 @@ export class AppService {
     if (!exercise) throw new Error(`Exercise ${record.exerciseId} is not part of lesson ${record.lessonId}`);
 
     const persisted = { ...record, recordedAt: this.now().toISOString() };
-    this.store.update((state) => {
-      this.store.appendAttempt(persisted);
-      return state;
-    });
+    this.store.appendAttempt(persisted);
     return this.evaluateAttempt(persisted, lesson);
+  }
+
+  /* ---------------- backup and restore ---------------- */
+
+  /** Build a complete, versioned backup of the current progress. */
+  createExport() {
+    return buildExport(this.store.getState(), { now: this.now, library: this.library });
+  }
+
+  /**
+   * Validate a candidate import without applying it.
+   *
+   * Lets the UI show what the file contains and what would change *before* the
+   * user commits, so a merge-vs-replace choice is informed rather than blind.
+   */
+  inspectImport(text) {
+    const result = parseImport(text, { library: this.library });
+    if (!result.ok) return result;
+
+    const current = this.store.getState();
+    const existingKeys = new Set((current.attempts ?? []).map(attemptKey));
+    const incoming = result.data.attempts ?? [];
+    const incomingKeys = new Set(incoming.map(attemptKey));
+
+    const duplicatesAgainstCurrent = incoming.filter((a) => existingKeys.has(attemptKey(a))).length;
+    const newFromFile = incoming.length - duplicatesAgainstCurrent;
+
+    return {
+      ...result,
+      preview: {
+        incoming: summarise(result.data),
+        current: summarise(current),
+        newAttempts: newFromFile,
+        duplicateAttempts: duplicatesAgainstCurrent,
+        importedAlreadyKnown: duplicatesAgainstCurrent,
+        // Whether replacing would lose data the file does not contain.
+        wouldLoseAttempts: (current.attempts ?? []).filter((a) => !incomingKeys.has(attemptKey(a))).length,
+        incomingSettings: result.data.profile?.settings ?? null,
+      },
+    };
+  }
+
+  /**
+   * Apply a validated import.
+   *
+   * @param {object} params
+   * @param {string} params.text   Raw file contents.
+   * @param {'merge'|'replace'} [params.mode]
+   */
+  async applyImport({ text, mode = 'merge' } = {}) {
+    if (!IMPORT_MODES[mode]) throw new Error(`Unknown import mode: ${mode}`);
+
+    const inspected = this.inspectImport(text);
+    if (!inspected.ok) {
+      const error = new Error('The file could not be imported.');
+      error.details = inspected.errors;
+      throw error;
+    }
+
+    const result =
+      mode === 'replace'
+        ? replaceState(inspected.data, { now: this.now })
+        : mergeStates(this.store.getState(), inspected.data, { now: this.now });
+
+    await this.store.replaceState(result.state);
+    await this.store.flush();
+
+    return {
+      mode,
+      added: result.added,
+      duplicates: result.duplicates,
+      replaced: result.replaced,
+      totalAttempts: this.store.getState().attempts.length,
+      warnings: inspected.warnings,
+      summary: summarise(this.store.getState()),
+    };
+  }
+
+  /** Resolve once every queued write has landed. */
+  async flush() {
+    await this.store.flush();
+  }
+
+  /** Most recent recoverable snapshot, for the "restore last backup" action. */
+  async lastBackup() {
+    return this.store.lastBackup();
+  }
+
+  /** Approximate local storage usage, for the settings screen. */
+  async storageUsage() {
+    return this.store.estimateUsage();
   }
 
   #verdict(record, lesson) {

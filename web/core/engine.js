@@ -244,6 +244,17 @@ export class TypingSession {
     const metrics = this.stats();
     const { fingerStats, movementStats } = this.attributeTargets();
 
+    /**
+     * Timestamps are emitted as ISO strings.
+     *
+     * Internally the session works in epoch milliseconds (cheap arithmetic), but
+     * a persisted record is read back by date grouping, streak calculation,
+     * export and import. A numeric field that some consumers treat as a string
+     * is exactly the kind of ambiguity that silently corrupts an import, so the
+     * record carries one canonical type.
+     */
+    const toIso = (value) => (typeof value === 'number' ? new Date(value).toISOString() : value ?? null);
+
     return {
       lessonId: this.lessonId,
       exerciseId: this.exerciseId,
@@ -256,8 +267,8 @@ export class TypingSession {
       fingerStats,
       movementStats,
       keystrokes: this.keystrokes,
-      startedAt: this.startedAt,
-      finishedAt: this.finishedAt,
+      startedAt: toIso(this.startedAt),
+      finishedAt: toIso(this.finishedAt),
       // Full completion means every character was eventually correct.
       fullyCorrect: this.results.every((r) => r === true),
     };

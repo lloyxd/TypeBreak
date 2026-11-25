@@ -18,7 +18,7 @@ import {
   movementForChar,
   describeChar,
   charsForFinger,
-} from '../src/core/keyboard.js';
+} from '../web/core/keyboard.js';
 
 describe('keyboard model', () => {
   test('every finger has a home key and metadata', () => {

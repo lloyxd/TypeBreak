@@ -9,8 +9,8 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { loadLibrary, validateLibrary, LibraryError } from '../src/core/library.js';
-import { FINGERS, FINGER_INFO, MOVEMENTS, describeChar } from '../src/core/keyboard.js';
+import { loadLibrary, validateLibrary, LibraryError } from '../web/core/library.js';
+import { FINGERS, FINGER_INFO, MOVEMENTS, describeChar } from '../web/core/keyboard.js';
 import { buildFixtureLibrary, loadRealLibrary } from './fixtures.js';
 
 describe('library validation', () => {
@@ -202,6 +202,28 @@ describe('library queries', () => {
     const library = buildFixtureLibrary();
     assert.ok(library.filter({ search: 'Ring' }).length >= 2);
     assert.equal(library.filter({ search: 'zzzzz' }).length, 0);
+  });
+
+  test('an empty-string filter means "not set", not "match nothing"', () => {
+    // Regression: the lessons page passes '' for unset query params, and a naive
+    // `lesson.level !== ''` comparison rejected every lesson.
+    const library = buildFixtureLibrary();
+    const total = library.size;
+    const all = library.filter({ finger: '', movement: '', category: '', difficulty: '', search: '' });
+    assert.equal(all.length, total, 'empty filters must return everything');
+
+    // A real filter combined with empty ones still works.
+    assert.equal(library.filter({ finger: 'LRING', difficulty: '', search: '' }).length, library.filter({ finger: 'LRING' }).length);
+  });
+
+  test('a difficulty given as a string is compared numerically', () => {
+    const library = buildFixtureLibrary();
+    const asString = library.filter({ difficulty: '4' });
+    const asNumber = library.filter({ difficulty: 4 });
+    assert.deepEqual(
+      asString.map((l) => l.id),
+      asNumber.map((l) => l.id),
+    );
   });
 
   test('filters combine with AND semantics', () => {

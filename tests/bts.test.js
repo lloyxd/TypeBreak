@@ -23,8 +23,8 @@ import {
   assess,
   assertPlanUsesLibraryOnly,
   evaluateFinger,
-} from '../src/core/bts.js';
-import { buildSnapshot, buildFingerProfiles } from '../src/core/profiles.js';
+} from '../web/core/bts.js';
+import { buildSnapshot, buildFingerProfiles } from '../web/core/profiles.js';
 import { buildFixtureLibrary, attempt, weakFingerAttempts, stateWith } from './fixtures.js';
 
 /** Build a snapshot for the fixture library from a list of attempts. */

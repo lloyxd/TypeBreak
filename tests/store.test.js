@@ -1,162 +1,183 @@
 /**
- * Store tests: atomic persistence, crash recovery, schema migration.
+ * Persistence and backup tests.
+ *
+ * The real store uses IndexedDB, which Node does not provide. Rather than adding
+ * a fake-IDB dependency, these tests cover two things:
+ *
+ *   1. `IndexedDbStore` against a minimal in-memory IndexedDB stand-in that
+ *      implements exactly the surface the store uses, so the store's own logic
+ *      (migration, backups, write serialisation, fallback) stays under test.
+ *   2. `migrate()` directly, which holds the schema rules that must survive
+ *      across versions and imports.
  */
 
-import { test, describe, beforeEach, afterEach } from 'node:test';
+import { test, describe, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, rmSync, writeFileSync, readFileSync, existsSync, readdirSync } from 'node:fs';
-import { join } from 'node:path';
-import { tmpdir } from 'node:os';
 
-import { Store, emptyState, migrate, STATE_VERSION } from '../src/core/store.js';
+import { IndexedDbStore, emptyState, migrate, STATE_VERSION, DB_NAME } from '../web/core/db.js';
 import { attempt } from './fixtures.js';
 
-let dir;
+/* ------------------------------------------------------------------ *
+ * A deliberately small IndexedDB stand-in
+ * ------------------------------------------------------------------ */
 
-beforeEach(() => {
-  dir = mkdtempSync(join(tmpdir(), 'typebreak-store-'));
-});
+/**
+ * Implements only what `db.js` touches: open, object stores with autoIncrement,
+ * get/put/add/delete/getAllKeys/clear, and transactions that fire oncomplete.
+ * Requests resolve on microtasks so ordering bugs in the store still surface.
+ */
+function installFakeIndexedDb() {
+  const databases = new Map();
 
-afterEach(() => {
-  rmSync(dir, { recursive: true, force: true });
-});
+  function makeStore() {
+    const data = new Map();
+    let nextKey = 1;
+    return {
+      data,
+      put(value, key) {
+        const actualKey = key === undefined ? nextKey++ : key;
+        data.set(actualKey, structuredClone(value));
+        return { result: actualKey };
+      },
+      add(value) {
+        const key = nextKey++;
+        data.set(key, structuredClone(value));
+        return { result: key };
+      },
+      get(key) {
+        return { result: data.has(key) ? structuredClone(data.get(key)) : undefined };
+      },
+      getAllKeys() {
+        return { result: [...data.keys()] };
+      },
+      delete(key) {
+        data.delete(key);
+        return { result: undefined };
+      },
+      clear() {
+        data.clear();
+        return { result: undefined };
+      },
+    };
+  }
 
-function newStore(name = 'state.json', opts = {}) {
-  return new Store(join(dir, name), opts);
+  const fake = {
+    open(name) {
+      const request = { result: null, error: null, onsuccess: null, onerror: null, onupgradeneeded: null };
+
+      queueMicrotask(() => {
+        const existing = databases.get(name);
+        if (existing) {
+          request.result = existing;
+          request.onsuccess?.({ target: request });
+          return;
+        }
+
+        const stores = new Map();
+        const db = {
+          name,
+          version: 1,
+          stores,
+          objectStoreNames: { contains: (n) => stores.has(n) },
+          createObjectStore(storeName) {
+            const store = makeStore();
+            stores.set(storeName, store);
+            return store;
+          },
+          transaction(storeNames) {
+            const names = Array.isArray(storeNames) ? storeNames : [storeNames];
+            const tx = { oncomplete: null, onerror: null, onabort: null, error: null };
+            tx.objectStore = (storeName) => {
+              const store = stores.get(storeName);
+              if (!store) throw new Error(`No object store ${storeName}`);
+              const wrap = (method) => (...args) => {
+                const result = store[method](...args);
+                // Attach onsuccess scheduling to the returned request. A
+                // macrotask (not a microtask) so callers can attach their
+                // handler after receiving the request, as the real API allows.
+                const request2 = { ...result, onsuccess: null, onerror: null };
+                setTimeout(() => request2.onsuccess?.({ target: request2 }), 0);
+                return request2;
+              };
+              return {
+                put: wrap('put'),
+                add: wrap('add'),
+                get: wrap('get'),
+                getAllKeys: wrap('getAllKeys'),
+                delete: wrap('delete'),
+                clear: wrap('clear'),
+              };
+            };
+            queueMicrotask(() => tx.oncomplete?.());
+            return tx;
+          },
+        };
+
+        databases.set(name, db);
+        request.result = db;
+        request.onupgradeneeded?.({ target: request });
+        // Defer so the caller can attach onsuccess after `open()` returns.
+        setTimeout(() => request.onsuccess?.({ target: request }), 0);
+      });
+
+      return request;
+    },
+  };
+
+  globalThis.indexedDB = fake;
+  return {
+    reset() {
+      databases.clear();
+    },
+    databases,
+  };
 }
 
-describe('store basics', () => {
-  test('a missing file yields an empty state without error', () => {
-    const store = newStore();
-    const state = store.load();
+let idb;
+
+beforeEach(() => {
+  idb = installFakeIndexedDb();
+  idb.reset();
+});
+
+/* ------------------------------------------------------------------ *
+ * State shape and migration
+ * ------------------------------------------------------------------ */
+
+describe('state document', () => {
+  test('emptyState has every section the analytics read', () => {
+    const state = emptyState();
     assert.equal(state.version, STATE_VERSION);
+    for (const key of ['attempts', 'fingers', 'movements', 'lessons', 'plans', 'tasks', 'assessments']) {
+      assert.ok(key in state, `state should have ${key}`);
+    }
     assert.deepEqual(state.attempts, []);
-    assert.ok(state.profile.settings);
+    assert.ok(state.profile.settings.mode);
   });
 
-  test('save then load round-trips', () => {
-    const store = newStore();
-    store.load();
-    store.appendAttempt(attempt({ lessonId: 'L1' }));
-    store.save();
-
-    const reopened = newStore();
-    const state = reopened.load();
-    assert.equal(state.attempts.length, 1);
-    assert.equal(state.attempts[0].lessonId, 'L1');
+  test('emptyState returns independent objects', () => {
+    const a = emptyState();
+    const b = emptyState();
+    a.profile.settings.mode = 'strict';
+    assert.notEqual(b.profile.settings.mode, 'strict');
   });
 
-  test('update applies a change and persists in one step', () => {
-    const store = newStore();
-    store.update((state) => {
-      state.profile.name = 'changed';
-      return state;
-    });
-    const reopened = newStore();
-    assert.equal(reopened.load().profile.name, 'changed');
-  });
-
-  test('attempt history is capped', () => {
-    const store = newStore('state.json', { maxAttempts: 5 });
-    store.load();
-    for (let i = 0; i < 10; i += 1) store.appendAttempt(attempt({ lessonId: `L${i}` }));
-    const state = store.getState();
-    assert.equal(state.attempts.length, 5);
-    assert.equal(state.attempts[0].lessonId, 'L5', 'the oldest attempts should be dropped');
-  });
-
-  test('updatedAt is refreshed on save', () => {
-    let now = new Date('2026-01-01T00:00:00Z');
-    const store = new Store(join(dir, 'state.json'), { now: () => now });
-    store.load();
-    const before = store.getState().updatedAt;
-    now = new Date('2026-01-02T00:00:00Z');
-    store.save();
-    assert.notEqual(store.getState().updatedAt, before);
-  });
-
-  test('reset clears progress', () => {
-    const store = newStore();
-    store.load();
-    store.appendAttempt(attempt({ lessonId: 'L1' }));
-    store.save();
-    store.reset();
-    assert.equal(store.getState().attempts.length, 0);
-  });
-});
-
-describe('durability', () => {
-  test('a write leaves a backup of the previous document', () => {
-    const store = newStore();
-    store.load();
-    store.appendAttempt(attempt({ lessonId: 'first' }));
-    store.save();
-    // Second save should back up the file containing the first attempt.
-    store.appendAttempt(attempt({ lessonId: 'second' }));
-    store.save();
-    assert.ok(existsSync(store.backupPath), 'a .bak file should exist after the second save');
-  });
-
-  test('a corrupt primary file is recovered from the backup', () => {
-    const store = newStore();
-    store.load();
-    store.appendAttempt(attempt({ lessonId: 'survivor' }));
-    store.save();
-    store.appendAttempt(attempt({ lessonId: 'second' }));
-    store.save();
-
-    // Corrupt the primary file; the backup holds the earlier good state.
-    writeFileSync(store.path, '{ this is not json', 'utf8');
-
-    const reopened = newStore();
-    const state = reopened.load();
-    assert.ok(state.attempts.length >= 1, 'progress should survive a corrupt primary file');
-  });
-
-  test('a corrupt file with no backup is quarantined, not silently overwritten', () => {
-    const store = newStore();
-    writeFileSync(store.path, 'broken', 'utf8');
-    const state = store.load();
-    assert.equal(state.attempts.length, 0);
-    // A copy of the damaged file must be kept for inspection.
-    const quarantined = readdirSync(dir).filter((f) => f.includes('corrupt'));
-    assert.equal(quarantined.length, 1, 'the damaged file should be preserved');
-  });
-
-  test('an empty file is treated as missing, not corrupt', () => {
-    const store = newStore();
-    writeFileSync(store.path, '', 'utf8');
-    const state = store.load();
-    assert.equal(state.attempts.length, 0);
-  });
-
-  test('the saved document is valid JSON with a trailing newline', () => {
-    const store = newStore();
-    store.load();
-    store.save();
-    const raw = readFileSync(store.path, 'utf8');
-    assert.ok(raw.endsWith('\n'));
-    assert.doesNotThrow(() => JSON.parse(raw));
-  });
-});
-
-describe('migration', () => {
   test('migrate fills in missing sections', () => {
     const migrated = migrate({ version: 0 });
     assert.equal(migrated.version, STATE_VERSION);
     for (const key of ['attempts', 'fingers', 'movements', 'lessons', 'plans', 'tasks', 'assessments']) {
-      assert.ok(key in migrated, `migration should add ${key}`);
+      assert.ok(key in migrated);
     }
     assert.ok(Array.isArray(migrated.attempts));
   });
 
   test('migrate preserves existing settings and adds new defaults', () => {
     const migrated = migrate({ version: 0, profile: { settings: { mode: 'strict' } } });
-    assert.equal(migrated.profile.settings.mode, 'strict', 'existing settings survive');
-    assert.ok(migrated.profile.settings.dailyGoalExercises, 'new defaults are added');
+    assert.equal(migrated.profile.settings.mode, 'strict');
+    assert.ok(migrated.profile.settings.dailyGoalExercises, 'missing defaults are added');
   });
 
-  test('migrate drops uninterpretable attempt records', () => {
+  test('migrate drops uninterpretable attempts', () => {
     const migrated = migrate({
       version: 0,
       attempts: [
@@ -164,17 +185,157 @@ describe('migration', () => {
         { lessonId: 'no-metrics', exerciseId: 'x' },
         { metrics: { wpm: 5 } },
         null,
-        { lessonId: 'no-exercise', metrics: { wpm: 1 } },
       ],
     });
-    assert.equal(migrated.attempts.length, 1, 'only records with an exercise and metrics survive');
+    assert.equal(migrated.attempts.length, 1);
     assert.equal(migrated.attempts[0].lessonId, 'ok');
   });
 
-  test('emptyState produces an independent object each call', () => {
-    const a = emptyState();
-    const b = emptyState();
-    a.profile.name = 'x';
-    assert.notEqual(b.profile.name, 'x');
+  test('migrate replaces a non-object section with a default', () => {
+    const migrated = migrate({ version: 0, plans: ['not', 'an', 'object'], fingers: 42 });
+    assert.deepEqual(migrated.plans, {});
+    assert.deepEqual(migrated.fingers, {});
+  });
+});
+
+/* ------------------------------------------------------------------ *
+ * IndexedDbStore
+ * ------------------------------------------------------------------ */
+
+describe('IndexedDbStore', () => {
+  test('a fresh database yields an empty document', async () => {
+    const store = new IndexedDbStore();
+    const state = await store.init();
+    assert.equal(state.attempts.length, 0);
+    assert.equal(store.available, true);
+  });
+
+  test('appending an attempt persists it', async () => {
+    const store = new IndexedDbStore();
+    await store.init();
+    store.appendAttempt(attempt({ lessonId: 'L1' }));
+    await store.flush();
+
+    const reopened = new IndexedDbStore();
+    await reopened.init();
+    assert.equal(reopened.getState().attempts.length, 1);
+    assert.equal(reopened.getState().attempts[0].lessonId, 'L1');
+  });
+
+  test('history is capped at maxAttempts, keeping the newest', async () => {
+    const store = new IndexedDbStore({ maxAttempts: 5 });
+    await store.init();
+    for (let i = 0; i < 10; i += 1) store.appendAttempt(attempt({ lessonId: `L${i}` }));
+    await store.flush();
+
+    const attempts = store.getState().attempts;
+    assert.equal(attempts.length, 5);
+    assert.equal(attempts[0].lessonId, 'L5');
+  });
+
+  test('updatedAt advances on update', async () => {
+    let now = new Date('2026-01-01T00:00:00Z');
+    const store = new IndexedDbStore({ now: () => now });
+    await store.init();
+    const before = store.getState().updatedAt;
+    now = new Date('2026-01-02T00:00:00Z');
+    store.update((state) => {
+      state.profile.name = 'changed';
+    });
+    await store.flush();
+    assert.notEqual(store.getState().updatedAt, before);
+  });
+
+  test('replaceState swaps the whole document', async () => {
+    const store = new IndexedDbStore();
+    await store.init();
+    store.appendAttempt(attempt({ lessonId: 'old' }));
+    await store.flush();
+
+    await store.replaceState({ ...emptyState(), attempts: [attempt({ lessonId: 'new' })] });
+    assert.equal(store.getState().attempts.length, 1);
+    assert.equal(store.getState().attempts[0].lessonId, 'new');
+
+    const reopened = new IndexedDbStore();
+    await reopened.init();
+    assert.equal(reopened.getState().attempts[0].lessonId, 'new');
+  });
+
+  test('clear empties the document and the persisted copy', async () => {
+    const store = new IndexedDbStore();
+    await store.init();
+    store.appendAttempt(attempt({ lessonId: 'L1' }));
+    await store.flush();
+
+    await store.clear();
+    assert.equal(store.getState().attempts.length, 0);
+
+    const reopened = new IndexedDbStore();
+    await reopened.init();
+    assert.equal(reopened.getState().attempts.length, 0);
+  });
+
+  test('writes are serialised, so rapid updates cannot interleave', async () => {
+    const store = new IndexedDbStore();
+    await store.init();
+    for (let i = 0; i < 20; i += 1) store.appendAttempt(attempt({ lessonId: `L${i}` }));
+    await store.flush();
+
+    const reopened = new IndexedDbStore();
+    await reopened.init();
+    assert.equal(reopened.getState().attempts.length, 20, 'every write should have landed');
+    assert.equal(reopened.getState().attempts[19].lessonId, 'L19');
+  });
+
+  test('a backup of the previous document is kept', async () => {
+    const store = new IndexedDbStore();
+    await store.init();
+    store.appendAttempt(attempt({ lessonId: 'first' }));
+    await store.flush();
+    store.appendAttempt(attempt({ lessonId: 'second' }));
+    await store.flush();
+
+    const backup = await store.lastBackup();
+    assert.ok(backup, 'a backup should exist after writes');
+    assert.ok(backup.state.attempts.length >= 1);
+  });
+
+  test('backups are pruned so storage does not grow without bound', async () => {
+    const store = new IndexedDbStore();
+    await store.init();
+    for (let i = 0; i < 10; i += 1) {
+      store.appendAttempt(attempt({ lessonId: `L${i}` }));
+      await store.flush();
+    }
+    const db = idb.databases.get(DB_NAME);
+    const backups = db.stores.get('backups');
+    assert.ok(backups.data.size <= 3, `expected at most 3 backups, found ${backups.data.size}`);
+  });
+
+  test('falls back to memory when IndexedDB is unavailable', async () => {
+    // Simulate a browser that blocks storage (private mode).
+    globalThis.indexedDB = {
+      open() {
+        const request = { error: new Error('blocked'), onsuccess: null, onerror: null, onupgradeneeded: null };
+        setTimeout(() => request.onerror?.({ target: request }), 0);
+        return request;
+      },
+    };
+
+    const store = new IndexedDbStore();
+    await store.init();
+    assert.equal(store.available, false);
+    assert.ok(store.storageError, 'the reason should be recorded');
+
+    // The app must still work in-memory.
+    store.appendAttempt(attempt({ lessonId: 'memory-only' }));
+    assert.equal(store.getState().attempts.length, 1);
+    await store.flush(); // must not throw
+  });
+
+  test('using the store before init is a clear error', () => {
+    const store = new IndexedDbStore();
+    assert.throws(() => store.getState(), /before init/);
+    assert.throws(() => store.update((s) => s), /before init/);
   });
 });

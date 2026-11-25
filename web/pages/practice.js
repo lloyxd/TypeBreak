@@ -10,7 +10,7 @@
  */
 
 import { h, mount, clear } from '../dom.js';
-import { api } from '../api.js';
+import { client as api } from '../client.js';
 import { navigate } from '../router.js';
 import { pageHead, errorBox, toast } from './shared.js';
 
@@ -60,9 +60,17 @@ export async function practicePage({ query }) {
     return [pageHead('Practice', 'Choose a lesson first.'), errorBox('No lesson selected. Open the Lessons page to pick one.')];
   }
 
+  const detail = api.lesson(lessonId);
+  if (!detail) {
+    return [
+      pageHead('Practice', null),
+      errorBox(`No lesson with the id "${lessonId}". Browse the library to pick one.`),
+    ];
+  }
+
+  const { lesson } = detail;
   let payload;
   try {
-    const { lesson } = await api.lesson(lessonId);
     const exercise = exerciseIndex !== null ? lesson.exercises[exerciseIndex] : undefined;
     payload = await api.startSession({ lessonId, exerciseId: exercise?.id, mode });
     payload.lessonDetail = lesson;
@@ -393,7 +401,12 @@ function buildPracticeView(payload, ctx) {
   async function complete() {
     try {
       const result = await api.finish();
+      // Persist immediately: a refresh on the summary screen must not lose the
+      // attempt that just produced it.
+      await api.flush?.();
       mount(summaryHost, buildSummary(result, ctx, lesson));
+      // Let the sidebar and any listener know progress moved.
+      window.dispatchEvent(new CustomEvent('typebreak:progress-changed'));
     } catch (error) {
       mount(summaryHost, errorBox(error.message));
     }

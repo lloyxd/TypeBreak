@@ -21,10 +21,10 @@ import {
   fingerLabel,
   keyInfo,
   movementLabel,
-} from '../src/core/keyboard.js';
+} from '../web/core/keyboard.js';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const OUT = join(HERE, '..', 'data', 'lessons.json');
+const OUT = join(HERE, '..', 'web', 'data', 'lessons.json');
 
 /* ------------------------------------------------------------------ *
  * Deterministic randomness

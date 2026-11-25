@@ -3,7 +3,7 @@
  */
 
 import { h, section, card, barRow, pill, empty, dataTable, lineChart, sparkline, accuracyLabel, trendLabel, duration, relativeTime } from '../dom.js';
-import { api } from '../api.js';
+import { client as api } from '../client.js';
 import { pageHead, shortDate } from './shared.js';
 import { statsStrip } from '../dom.js';
 

@@ -5,13 +5,14 @@
  *   node tools/check-unused.js
  */
 
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
-const ROOTS = ['src', 'web', 'tools', 'tests'];
+const ROOTS = ['web', 'tools', 'tests'];
 const files = [];
 
 function walk(dir) {
+  if (!existsSync(dir)) return;
   for (const entry of readdirSync(dir)) {
     const path = join(dir, entry);
     if (statSync(path).isDirectory()) walk(path);

@@ -1,42 +1,36 @@
 /**
  * Service integration tests.
  *
- * The service is the one surface both the CLI and the web app call, so these
- * tests stand in for "the CLI and the web see the same thing": they exercise the
- * exact methods both front ends use, against a real store on disk.
+ * The service is the single surface the browser app calls, so these exercise
+ * exactly what the pages use. A MemoryStore stands in for IndexedDB, which keeps
+ * the tests synchronous and focused on service behaviour; the real IndexedDB
+ * implementation is covered in `store.test.js`.
  */
 
-import { test, describe, beforeEach, afterEach } from 'node:test';
+import { test, describe, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, rmSync } from 'node:fs';
-import { join } from 'node:path';
-import { tmpdir } from 'node:os';
 
-import { AppService } from '../src/core/service.js';
+import { AppService } from '../web/core/service.js';
 import { buildFixtureLibrary } from './fixtures.js';
+import { MemoryStore } from './memory-store.js';
 
-let dir;
 let clock;
+let library;
 
 beforeEach(() => {
-  dir = mkdtempSync(join(tmpdir(), 'typebreak-service-'));
   let current = new Date('2026-11-15T09:00:00Z');
   clock = () => new Date(current);
   clock.advance = (ms) => {
     current = new Date(current.getTime() + ms);
   };
-});
-
-afterEach(() => {
-  rmSync(dir, { recursive: true, force: true });
+  library = buildFixtureLibrary();
 });
 
 function newService() {
   return new AppService({
-    rootDir: dir,
-    statePath: join(dir, 'state.json'),
-    library: buildFixtureLibrary(),
+    library,
     now: clock,
+    store: new MemoryStore({ now: clock }),
   });
 }
 
@@ -255,28 +249,32 @@ describe('plan and task persistence', () => {
     );
   });
 
-  test('the persisted plan survives a new service instance (the CLI/web boundary)', () => {
+  test('the plan is written to storage, not just held in memory', () => {
     const service = newService();
     const first = service.todaysPlan();
-
-    // A second service stands in for the other interface reading the same file.
-    const other = newService();
-    const plan = other.todaysPlan();
-    assert.equal(plan.reused, true, 'the other interface should see the same plan');
+    // The plan must exist in the persisted document, so a reload restores it
+    // instead of generating a different selection.
+    const stored = service.getState().plans[first.date];
+    assert.ok(stored, 'the plan should be persisted under its date');
     assert.deepEqual(
-      plan.items.map((i) => i.lessonId),
+      stored.items.map((i) => i.lessonId),
       first.items.map((i) => i.lessonId),
     );
   });
 
-  test('progress recorded by one service is visible to another', () => {
-    const web = newService();
-    practise(web, 'T-INDEX-HOME');
+  test('an attempt is persisted through the store, so it survives a reload', () => {
+    const store = new MemoryStore({ now: clock });
+    const service = new AppService({ library, now: clock, store });
+    practise(service, 'T-INDEX-HOME');
 
-    const cli = newService();
-    const stats = cli.stats();
-    assert.equal(stats.attempts, 1, 'the CLI must see what the web recorded');
-    const fingers = cli.fingerProgress().find((f) => f.finger === 'LINDEX');
+    assert.equal(store.getState().attempts.length, 1, 'the attempt must be in the store');
+    assert.equal(store.writeCount > 0, true, 'a write should have been issued');
+
+    // A second service over the same store is what a page reload looks like.
+    const reloaded = new AppService({ library, now: clock, store });
+    const stats = reloaded.stats();
+    assert.equal(stats.attempts, 1);
+    const fingers = reloaded.fingerProgress().find((f) => f.finger === 'LINDEX');
     assert.ok(fingers.total > 0);
   });
 
@@ -297,12 +295,16 @@ describe('plan and task persistence', () => {
 });
 
 describe('settings and reset', () => {
-  test('settings update and persist', () => {
-    const service = newService();
+  test('settings update and are written to storage', () => {
+    const store = new MemoryStore({ now: clock });
+    const service = new AppService({ library, now: clock, store });
+
     service.updateSettings({ mode: 'strict', dailyGoalExercises: 9 });
-    const reopened = newService();
-    assert.equal(reopened.settings().mode, 'strict');
-    assert.equal(reopened.settings().dailyGoalExercises, 9);
+    assert.equal(service.settings().mode, 'strict');
+
+    // Read back from the store, as a reload would.
+    assert.equal(store.getState().profile.settings.mode, 'strict');
+    assert.equal(store.getState().profile.settings.dailyGoalExercises, 9);
   });
 
   test('reset clears attempts and plans', () => {

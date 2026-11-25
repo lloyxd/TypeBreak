@@ -6,33 +6,30 @@
  */
 
 import { h, section, card, pill, empty, dataTable } from '../dom.js';
-import { api } from '../api.js';
-import { navigate } from '../router.js';
+import { client as api } from '../client.js';
+import { navigate, refreshRoute } from '../router.js';
 import { pageHead, toast } from './shared.js';
 export async function adaptivePage() {
-  const data = await api.adaptive();
+  const data = api.adaptive();
 
   // The plan carries lesson ids; the recommendations list is only the top few,
   // so names are resolved against the full library to avoid showing raw ids.
   const nameById = new Map();
-  try {
-    const all = await api.lessons();
-    for (const lesson of all) nameById.set(lesson.id, lesson.name);
-  } catch {
-    /* fall back to ids rather than failing the page */
-  }
+  for (const lesson of api.lessons()) nameById.set(lesson.id, lesson.name);
   for (const rec of data.recommendations) nameById.set(rec.lessonId, rec.name);
   const lessonNameOf = (item) => nameById.get(item.lessonId) ?? item.lessonId;
 
   const regenBtn = h('button', {
-    onClick: async (event) => {
+    onClick: (event) => {
       const btn = event.currentTarget;
       btn.disabled = true;
       btn.textContent = 'Recomputing…';
       try {
-        await api.regeneratePlan();
+        api.regeneratePlan();
         toast('Plan regenerated with fresh scoring');
-        navigate('/adaptive?t=' + Date.now());
+        // Re-render in place: the new plan is persisted, so a re-mount shows it
+        // without a reload or a fake query string the router would have to strip.
+        refreshRoute();
       } catch (error) {
         toast(error.message);
         btn.disabled = false;

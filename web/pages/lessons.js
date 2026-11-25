@@ -3,10 +3,11 @@
  */
 
 import { h, section, card, pill, empty, relativeTime, clear } from '../dom.js';
-import { api } from '../api.js';
+import { client as api } from '../client.js';
 import { navigate } from '../router.js';
 import { pageHead, errorBox } from './shared.js';
 
+/** Facets are derived from a static library, so one lookup per session is enough. */
 let cachedFacets = null;
 
 export async function lessonsPage({ query }) {
@@ -18,8 +19,9 @@ export async function lessonsPage({ query }) {
     search: query.get('search') ?? '',
   };
 
-  const [lessons, overview] = await Promise.all([api.lessons(filters), cachedFacets ? Promise.resolve(cachedFacets) : api.bootstrap()]);
-  cachedFacets = overview.overview?.facets ?? overview.facets ?? cachedFacets;
+  const lessons = api.lessons(filters);
+  const overview = api.libraryOverview();
+  cachedFacets = overview.facets ?? cachedFacets;
 
   const facets = cachedFacets ?? { fingers: [], movements: [], categories: [], levels: [] };
 
@@ -151,11 +153,9 @@ export async function lessonsPage({ query }) {
  * Single lesson detail page.
  */
 export async function lessonPage({ params }) {
-  let payload;
-  try {
-    payload = await api.lesson(params.id);
-  } catch (error) {
-    return [pageHead('Lesson', null), errorBox(error.message)];
+  const payload = api.lesson(params.id);
+  if (!payload) {
+    return [pageHead('Lesson', null), errorBox(`No lesson with the id "${params.id}". Browse the library to find one.`)];
   }
 
   const { lesson, progress } = payload;

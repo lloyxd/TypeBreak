@@ -9,9 +9,9 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { MOVEMENTS, FINGERS, describeChar, KEY_TABLE_SOURCE } from '../src/core/keyboard.js';
-import { identifyWeaknesses, planDay, scoreLessons, BTS_CONFIG } from '../src/core/bts.js';
-import { buildSnapshot } from '../src/core/profiles.js';
+import { MOVEMENTS, FINGERS, describeChar, KEY_TABLE_SOURCE } from '../web/core/keyboard.js';
+import { identifyWeaknesses, planDay, scoreLessons, BTS_CONFIG } from '../web/core/bts.js';
+import { buildSnapshot } from '../web/core/profiles.js';
 import { buildFixtureLibrary, attempt, weakFingerAttempts, stateWith } from './fixtures.js';
 
 const NOW = new Date('2026-11-15T10:00:00');
@@ -47,7 +47,7 @@ describe('R1 — the library is predefined and authoritative', () => {
     const { join, dirname } = await import('node:path');
     const { fileURLToPath } = await import('node:url');
     const here = dirname(fileURLToPath(import.meta.url));
-    const raw = JSON.parse(readFileSync(join(here, '..', 'data', 'lessons.json'), 'utf8'));
+    const raw = JSON.parse(readFileSync(join(here, '..', 'web', 'data', 'lessons.json'), 'utf8'));
 
     const library = await loadRealLibrary();
     const rawIds = new Set(raw.lessons.flatMap((l) => l.exercises.map((e) => e.id)));
@@ -407,54 +407,118 @@ describe('R10 — progress reflects demonstrated ability', () => {
 });
 
 /**
- * Requirement 8: both interfaces share the same logic and data.
+ * Requirement 8 (revised for the client-side architecture): a single local core.
  *
- * Structurally proven: both front ends import the same modules, and the service
- * is the only surface they touch.
+ * The app must be entirely client-side, with all learning logic in shared
+ * modules rather than duplicated in pages, and no network dependency anywhere.
  */
-describe('R8 — one shared core', () => {
-  test('the CLI and the web server both depend on AppService', async () => {
+describe('R8 — one local core, no backend', () => {
+  const read = async (relPath) => {
     const { readFileSync } = await import('node:fs');
     const { join, dirname } = await import('node:path');
     const { fileURLToPath } = await import('node:url');
     const here = dirname(fileURLToPath(import.meta.url));
+    return readFileSync(join(here, '..', relPath), 'utf8');
+  };
 
-    const cliSource = readFileSync(join(here, '..', 'src', 'cli', 'app.js'), 'utf8');
-    const serverSource = readFileSync(join(here, '..', 'src', 'server', 'index.js'), 'utf8');
+  test('there is no server or CLI in the project', async () => {
+    const { existsSync } = await import('node:fs');
+    const { join, dirname } = await import('node:path');
+    const { fileURLToPath } = await import('node:url');
+    const here = dirname(fileURLToPath(import.meta.url));
+    const root = join(here, '..');
 
-    assert.match(cliSource, /AppService/, 'the CLI must use AppService');
-    assert.match(serverSource, /AppService/, 'the server must use AppService');
+    assert.equal(existsSync(join(root, 'src')), false, 'the src/ tree (CLI + server) should be gone');
+    assert.equal(existsSync(join(root, 'web', 'api.js')), false, 'the HTTP API client should be gone');
   });
 
-  test('neither interface reimplements scoring', async () => {
-    const { readFileSync } = await import('node:fs');
-    const { join, dirname } = await import('node:path');
-    const { fileURLToPath } = await import('node:url');
-    const here = dirname(fileURLToPath(import.meta.url));
+  test('no core or page module imports network APIs', async () => {
+    const files = [
+      'web/core/service.js',
+      'web/core/bts.js',
+      'web/core/engine.js',
+      'web/core/profiles.js',
+      'web/core/library.js',
+      'web/core/keyboard.js',
+      'web/core/backup.js',
+      'web/pages/dashboard.js',
+      'web/pages/practice.js',
+      'web/pages/progress.js',
+      'web/pages/adaptive.js',
+      'web/pages/lessons.js',
+    ];
 
-    for (const file of ['src/cli/app.js', 'src/cli/drill.js', 'src/server/index.js']) {
-      const source = readFileSync(join(here, '..', file), 'utf8');
+    for (const file of files) {
+      const source = await read(file);
+      for (const forbidden of ['XMLHttpRequest', '/api/', 'fetch(']) {
+        // `fetch` is allowed only in the library loader inside service.js, which
+        // reads a static local file rather than calling a service.
+        if (forbidden === 'fetch(' && file === 'web/core/service.js') continue;
+        assert.equal(
+          source.includes(forbidden),
+          false,
+          `${file} must not use ${forbidden} — the app has no backend`,
+        );
+      }
+    }
+  });
+
+  test('the only fetch in the app reads the local lesson library', async () => {
+    const source = await read('web/core/service.js');
+    const fetchCalls = source.match(/fetch\(/g) ?? [];
+    assert.equal(fetchCalls.length, 1, 'exactly one fetch should exist');
+    assert.match(source, /fetch\(url/, 'and it should target the library URL, not an endpoint');
+    assert.match(source, /lessons\.json/, 'the library is a static asset');
+  });
+
+  test('the core modules never import Node built-ins', async () => {
+    const files = [
+      'web/core/service.js',
+      'web/core/db.js',
+      'web/core/backup.js',
+      'web/core/bts.js',
+      'web/core/engine.js',
+      'web/core/profiles.js',
+      'web/core/library.js',
+      'web/core/keyboard.js',
+      'web/core/context.js',
+      'web/client.js',
+      'web/app.js',
+    ];
+    for (const file of files) {
+      const source = await read(file);
+      assert.equal(
+        /from 'node:/.test(source),
+        false,
+        `${file} must not import a Node built-in — it runs in the browser`,
+      );
+    }
+  });
+
+  test('pages read data through the client adapter, not from each other', async () => {
+    for (const page of ['dashboard', 'lessons', 'practice', 'progress', 'adaptive', 'settings']) {
+      const source = await read(`web/pages/${page}.js`);
+      assert.match(
+        source,
+        /from '\.\.\/client\.js'/,
+        `${page} should get its data from client.js`,
+      );
+    }
+  });
+
+  test('BTS logic lives only in bts.js', async () => {
+    for (const file of ['web/pages/adaptive.js', 'web/pages/dashboard.js', 'web/client.js', 'web/app.js']) {
+      const source = await read(file);
+      assert.equal(
+        /function identifyWeaknesses/.test(source),
+        false,
+        `${file} must not reimplement weakness detection`,
+      );
       assert.equal(
         /correctChars\s*\/\s*5\s*\//.test(source),
         false,
         `${file} must not compute WPM itself`,
       );
-      assert.equal(
-        /function\s+identifyWeaknesses/.test(source),
-        false,
-        `${file} must not implement weakness detection`,
-      );
     }
-  });
-
-  test('the browser computes no WPM or accuracy of its own', async () => {
-    const { readFileSync } = await import('node:fs');
-    const { join, dirname } = await import('node:path');
-    const { fileURLToPath } = await import('node:url');
-    const here = dirname(fileURLToPath(import.meta.url));
-    const practice = readFileSync(join(here, '..', 'web', 'pages', 'practice.js'), 'utf8');
-    // The browser may format a value it was given, but must not derive one.
-    assert.equal(/'\/ 5\/'/.test(practice), false);
-    assert.match(practice, /result\.stats/, 'the browser should render stats sent by the server');
   });
 });

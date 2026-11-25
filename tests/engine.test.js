@@ -9,7 +9,7 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { TypingSession, computeMetrics, summarizeAttempts, formatDuration, round } from '../src/core/engine.js';
+import { TypingSession, computeMetrics, summarizeAttempts, formatDuration, round } from '../web/core/engine.js';
 
 /** A session with a controllable clock. */
 function session(text, { mode = 'flow', start = 0 } = {}) {

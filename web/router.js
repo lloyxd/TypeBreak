@@ -116,6 +116,17 @@ export function startRouter() {
   resolve();
 }
 
+/**
+ * Re-render the current route in place.
+ *
+ * Used when page state changes behind the router's back — regenerating the plan,
+ * or importing a backup — so the view reflects reality without a full reload or
+ * a fake query string in the URL.
+ */
+export function refreshRoute() {
+  return resolve();
+}
+
 /** Intercept in-app link clicks so full page loads are not needed. */
 export function link(path, ...children) {
   const a = document.createElement('a');

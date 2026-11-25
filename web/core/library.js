@@ -153,14 +153,17 @@ export function loadLibrary(doc) {
 
     /** Filter with any combination of criteria. All filters are ANDed. */
     filter({ finger, movement, category, difficulty, maxLevel, minLevel, search } = {}) {
+      // Treat an empty string as "not specified". Query-param-driven UIs pass ''
+      // for unset filters, and '' must never be interpreted as a real value.
+      const has = (value) => value !== undefined && value !== null && value !== '';
       return all.filter((lesson) => {
-        if (finger && !lesson.fingers.includes(finger)) return false;
-        if (movement && !lesson.movements.includes(movement)) return false;
-        if (category && lesson.category !== category) return false;
-        if (difficulty !== undefined && difficulty !== null && lesson.level !== difficulty) return false;
-        if (maxLevel !== undefined && lesson.level > maxLevel) return false;
-        if (minLevel !== undefined && lesson.level < minLevel) return false;
-        if (search) {
+        if (has(finger) && !lesson.fingers.includes(finger)) return false;
+        if (has(movement) && !lesson.movements.includes(movement)) return false;
+        if (has(category) && lesson.category !== category) return false;
+        if (has(difficulty) && lesson.level !== Number(difficulty)) return false;
+        if (has(maxLevel) && lesson.level > Number(maxLevel)) return false;
+        if (has(minLevel) && lesson.level < Number(minLevel)) return false;
+        if (has(search)) {
           const haystack = `${lesson.name} ${lesson.description} ${lesson.id}`.toLowerCase();
           if (!haystack.includes(String(search).toLowerCase())) return false;
         }

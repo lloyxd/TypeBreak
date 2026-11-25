@@ -5,7 +5,7 @@
  * obvious, while one test also runs against the real library to catch drift.
  */
 
-import { loadLibrary } from '../src/core/library.js';
+import { loadLibrary } from '../web/core/library.js';
 
 /** Fixed clock so streaks, staleness and date keys are reproducible. */
 export const FIXED_NOW = new Date('2026-11-15T10:00:00');
@@ -145,7 +145,7 @@ export async function loadRealLibrary() {
   const { join, dirname } = await import('node:path');
   const { fileURLToPath } = await import('node:url');
   const here = dirname(fileURLToPath(import.meta.url));
-  return loadLibrary(JSON.parse(readFileSync(join(here, '..', 'data', 'lessons.json'), 'utf8')));
+  return loadLibrary(JSON.parse(readFileSync(join(here, '..', 'web', 'data', 'lessons.json'), 'utf8')));
 }
 
 /**

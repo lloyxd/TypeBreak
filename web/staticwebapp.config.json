@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json.schemastore.org/staticwebapp.config.json",
+  "routes": [
+    {
+      "route": "/data/*",
+      "headers": {
+        "cache-control": "public, max-age=86400"
+      }
+    },
+    {
+      "route": "/icons/*",
+      "headers": {
+        "cache-control": "public, max-age=604800"
+      }
+    },
+    {
+      "route": "/sw.js",
+      "headers": {
+        "cache-control": "no-cache, must-revalidate"
+      }
+    },
+    {
+      "route": "/*",
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate"
+      }
+    }
+  ],
+  "globalHeaders": {
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "Referrer-Policy": "no-referrer",
+    "Permissions-Policy": "geolocation=(), microphone=(), camera=(), interest-cohort=()",
+    "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+  },
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/data/*", "/icons/*", "/sw.js", "/manifest.webmanifest", "/*.css", "/*.js", "/*.png"]
+  },
+  "mimeTypes": {
+    ".webmanifest": "application/manifest+json",
+    ".json": "application/json",
+    ".js": "text/javascript"
+  }
+}
