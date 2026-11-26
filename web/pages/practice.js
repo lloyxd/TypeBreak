@@ -16,6 +16,7 @@ import { pageHead, errorBox, toast } from './shared.js';
 import { ComboTracker } from '../ui/effects.js';
 import { getEffects } from '../app.js';
 import { freePracticePage } from './free-practice.js';
+import { decideLessonComplete, nextLessonId, remainingSeconds } from '../core/lesson-flow.js';
 
 const KEYBOARD_ROWS = [
   ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
@@ -96,6 +97,7 @@ function buildPracticeView(payload, ctx) {
     busy: false,
     startedAt: null,
     timer: null,
+    prompt: null,
   };
 
   const lesson = payload.lesson;
@@ -310,6 +312,50 @@ function buildPracticeView(payload, ctx) {
   /* ---------- summary panel ---------- */
 
   const summaryHost = h('div');
+  const overlayHost = h('div');
+
+  function clearPrompt() {
+    if (state.prompt?.timer) clearInterval(state.prompt.timer);
+    state.prompt = null;
+    clear(overlayHost);
+  }
+
+  function redoLesson() {
+    clearPrompt();
+    navigate(`/practice?lesson=${encodeURIComponent(ctx.lessonId)}&mode=${ctx.mode}&ex=0`);
+  }
+
+  function goNextLesson() {
+    clearPrompt();
+    const next = nextLessonId(api.lessons(), ctx.lessonId);
+    if (next) navigate(`/practice?lesson=${encodeURIComponent(next)}&mode=${ctx.mode}&ex=0`);
+    else navigate('/lessons');
+  }
+
+  function startLessonCompletePrompt() {
+    const startedAt = Date.now();
+    const countEl = h('div.lesson-complete-count', null, String(remainingSeconds(0)));
+    overlayHost.appendChild(
+      h(
+        'div.lesson-complete-overlay',
+        { role: 'dialog', 'aria-label': 'Redo this lesson' },
+        h(
+          'div.lesson-complete-card',
+          null,
+          h('h2', null, 'Lesson complete'),
+          h('p', null, 'Press space to redo this lesson.'),
+          countEl,
+          h('p.faint', { style: { margin: '0' } }, 'Next lesson if you wait'),
+        ),
+      ),
+    );
+    const timer = setInterval(() => {
+      const elapsed = Date.now() - startedAt;
+      countEl.textContent = String(remainingSeconds(elapsed));
+      if (decideLessonComplete({ elapsedMs: elapsed }) === 'next') goNextLesson();
+    }, 200);
+    state.prompt = { startedAt, timer };
+  }
 
   /* ---------- behaviour ---------- */
 
@@ -432,6 +478,12 @@ function buildPracticeView(payload, ctx) {
    * keyboards, which need a real focus target.
    */
   function handleKey(key) {
+    if (state.prompt) {
+      const elapsed = Date.now() - state.prompt.startedAt;
+      const action = decideLessonComplete({ spacePressed: key === ' ', elapsedMs: elapsed });
+      if (action === 'restart') redoLesson();
+      return;
+    }
     if (key === 'Backspace' || key === 'Delete') {
       handleBackspace();
       return;
@@ -474,6 +526,7 @@ function buildPracticeView(payload, ctx) {
   const detach = () => {
     document.removeEventListener('keydown', onDocumentKeydown);
     clearInterval(state.timer);
+    clearPrompt();
   };
   window.addEventListener('hashchange', detach, { once: true });
   window.addEventListener('beforeunload', detach, { once: true });
@@ -517,6 +570,8 @@ function buildPracticeView(payload, ctx) {
       summary.classList.add('summary-enter');
       mount(summaryHost, summary);
 
+      if (!result.nextExercise) startLessonCompletePrompt();
+
       // Let the sidebar and any listener know progress moved.
       window.dispatchEvent(new CustomEvent('typebreak:progress-changed'));
     } catch (error) {
@@ -552,6 +607,7 @@ function buildPracticeView(payload, ctx) {
     keyboard,
     focusNote,
     summaryHost,
+    overlayHost,
   );
 }
 
