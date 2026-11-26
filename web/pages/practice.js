@@ -341,6 +341,13 @@ function buildPracticeView(payload, ctx) {
     else navigate('/lessons');
   }
 
+  function goNextLesson() {
+    clearPrompt();
+    const next = nextLessonId(api.lessons(), ctx.lessonId);
+    if (next) navigate(`/practice?lesson=${encodeURIComponent(next)}&mode=${ctx.mode}&ex=0`);
+    else navigate('/lessons');
+  }
+
   function revealLessonCompletePrompt() {
     const startedAt = Date.now();
     const countEl = h('div.lesson-complete-count', null, String(remainingSeconds(0)));
@@ -352,7 +359,7 @@ function buildPracticeView(payload, ctx) {
         null,
         h('h2', null, 'Next in'),
         countEl,
-        h('p', null, 'Press space to redo this lesson.'),
+        h('p', null, 'Tab to redo · Space for the next lesson'),
         h('p.faint', { style: { margin: '8px 0 0' } }, 'Waiting continues automatically'),
       ),
     );
@@ -476,6 +483,11 @@ function buildPracticeView(payload, ctx) {
 
   input.addEventListener('keydown', (event) => {
     if (event.ctrlKey || event.metaKey || event.altKey) return;
+    if (state.prompt?.visible && (event.key === 'Tab' || event.key === ' ')) {
+      event.preventDefault();
+      handleKey(event.key);
+      return;
+    }
     if (event.key === 'Tab' || event.key === 'Escape') return;
     // Prevent the browser from doing anything with printable keys except
     // delivering them to us; `beforeinput` below is the single source.
@@ -496,8 +508,13 @@ function buildPracticeView(payload, ctx) {
     if (state.prompt) {
       if (!state.prompt.visible) return;
       const elapsed = Date.now() - state.prompt.startedAt;
-      const action = decideLessonComplete({ spacePressed: key === ' ', elapsedMs: elapsed });
+      const action = decideLessonComplete({
+        tabPressed: key === 'Tab',
+        spacePressed: key === ' ',
+        elapsedMs: elapsed,
+      });
       if (action === 'restart') redoLesson();
+      if (action === 'next-lesson') goNextLesson();
       return;
     }
     if (key === 'Backspace' || key === 'Delete') {
@@ -529,6 +546,11 @@ function buildPracticeView(payload, ctx) {
     if (tag === 'INPUT' && event.target !== input) return;
     if (tag === 'TEXTAREA' || tag === 'SELECT') return;
     if (event.ctrlKey || event.metaKey || event.altKey) return;
+    if (state.prompt?.visible && (event.key === 'Tab' || event.key === ' ')) {
+      event.preventDefault();
+      handleKey(event.key);
+      return;
+    }
     if (event.key === 'Tab' || event.key === 'F5') return;
     if (event.key.length > 1 && !['Backspace', 'Delete', 'Enter', 'Escape'].includes(event.key)) return;
     event.preventDefault();

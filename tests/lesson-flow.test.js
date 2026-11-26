@@ -29,8 +29,12 @@ describe('decideLessonComplete', () => {
     assert.equal(decideLessonComplete({ elapsedMs: REDO_WINDOW_MS }), 'next');
   });
 
-  test('restarts when space is pressed, even at the last millisecond', () => {
-    assert.equal(decideLessonComplete({ spacePressed: true, elapsedMs: REDO_WINDOW_MS }), 'restart');
+  test('restarts when tab is pressed, even at the last millisecond', () => {
+    assert.equal(decideLessonComplete({ tabPressed: true, elapsedMs: REDO_WINDOW_MS }), 'restart');
+  });
+
+  test('space skips to the next lesson immediately', () => {
+    assert.equal(decideLessonComplete({ spacePressed: true, elapsedMs: 0 }), 'next-lesson');
   });
 });
 

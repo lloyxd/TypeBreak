@@ -2,15 +2,21 @@
  * What happens after an exercise finishes.
  *
  * The prompt is delayed so the summary can land, then a short countdown
- * advances by default. Space restarts the same lesson.
+ * advances by default. Tab restarts the same lesson; Space skips to the next.
  */
 
 export const PROMPT_DELAY_MS = 2000;
 export const REDO_SECONDS = 5;
 export const REDO_WINDOW_MS = REDO_SECONDS * 1000;
 
-export function decideLessonComplete({ spacePressed = false, elapsedMs = 0, windowMs = REDO_WINDOW_MS } = {}) {
-  if (spacePressed) return 'restart';
+export function decideLessonComplete({
+  tabPressed = false,
+  spacePressed = false,
+  elapsedMs = 0,
+  windowMs = REDO_WINDOW_MS,
+} = {}) {
+  if (tabPressed) return 'restart';
+  if (spacePressed) return 'next-lesson';
   if (elapsedMs >= windowMs) return 'next';
   return 'wait';
 }
