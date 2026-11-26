@@ -4,14 +4,14 @@
 :root {
   color-scheme: dark;
 
-  /* surfaces */
-  --bg: #070a1c;
-  --panel: rgba(20, 27, 58, 0.74);
-  --panel-solid: #141b3a;
-  --panel-raised: rgba(30, 40, 80, 0.8);
-  --panel-inset: rgba(10, 14, 34, 0.62);
-  --edge: rgba(150, 178, 255, 0.16);
-  --edge-strong: rgba(168, 196, 255, 0.34);
+  /* surfaces — winter night, pine in the shadows */
+  --bg: #07120e;
+  --panel: rgba(18, 32, 28, 0.78);
+  --panel-solid: #14241f;
+  --panel-raised: rgba(28, 48, 40, 0.82);
+  --panel-inset: rgba(8, 16, 14, 0.64);
+  --edge: rgba(180, 210, 170, 0.16);
+  --edge-strong: rgba(220, 190, 120, 0.34);
 
   /* text */
   --text: #eef3ff;
@@ -19,13 +19,13 @@
   --text-faint: #6f7fa8;
 
   /* accents */
-  --gold: #ffd45c;
-  --gold-deep: #f0a93c;
-  --cyan: #7fd8ff;
-  --lavender: #b9a4ff;
-  --green: #6ee7a0;
-  --rose: #ff7d9c;
-  --red: #ff5f6d;
+  --gold: #f3c96b;
+  --gold-deep: #d4a24a;
+  --cyan: #9ad7c2;
+  --lavender: #c9b48a;
+  --green: #5fbf7a;
+  --rose: #d45d5d;
+  --red: #c94a4a;
   /* Alias kept so older page code that asks for "yellow" still resolves. */
   --yellow: var(--gold);
 
@@ -62,6 +62,24 @@ body {
   line-height: 1.55;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Soft festive wash — two radial blobs, no extra assets. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 12% -10%, rgba(180, 42, 42, 0.18), transparent 46%),
+    radial-gradient(ellipse at 88% 0%, rgba(32, 110, 62, 0.22), transparent 50%);
+  animation: festive-wash 22s ease-in-out infinite alternate;
+}
+
+@keyframes festive-wash {
+  from { opacity: 0.7; transform: scale(1); }
+  to { opacity: 1; transform: scale(1.08); }
 }
 
 /* ---------- animated scene ---------- */
@@ -1723,11 +1741,50 @@ td.num, th.num { text-align: right; }
 
 /* ---------- dashboard actions ---------- */
 
+.dash-stage {
+  position: relative;
+  max-width: 560px;
+}
+
+.dash-flakes {
+  position: absolute;
+  inset: -24px 0 auto;
+  height: min(72vh, 640px);
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.dash-flake {
+  position: absolute;
+  top: -12px;
+  left: calc(8% + var(--n) * 7.4%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 250, 240, 0.85);
+  box-shadow: 0 0 8px rgba(255, 250, 240, 0.45);
+  animation: dash-fall 11s linear infinite;
+  animation-delay: calc(var(--n) * -0.9s);
+  opacity: 0.55;
+}
+
+.dash-flake:nth-child(odd) {
+  width: 4px;
+  height: 4px;
+  animation-duration: 14s;
+}
+
+@keyframes dash-fall {
+  0% { transform: translate3d(0, -20px, 0); opacity: 0; }
+  12% { opacity: 0.7; }
+  100% { transform: translate3d(18px, 640px, 0); opacity: 0; }
+}
+
 .dash-actions {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-  margin: 48px 0 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 28px 0 24px;
 }
 
 .dash-action {
@@ -1735,14 +1792,25 @@ td.num, th.num { text-align: right; }
   flex-direction: column;
   align-items: flex-start;
   gap: 8px;
-  min-height: 148px;
-  padding: 22px 22px 20px;
+  min-height: 132px;
+  width: 100%;
+  padding: 22px 24px;
   border-radius: 18px;
   border: 1px solid var(--edge-strong);
-  background: linear-gradient(170deg, rgba(24, 33, 70, 0.9), rgba(14, 19, 45, 0.92));
+  background: linear-gradient(170deg, rgba(28, 48, 38, 0.92), rgba(12, 22, 18, 0.94));
   color: inherit;
   text-align: left;
   cursor: pointer;
+  animation: dash-drop 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.dash-action:nth-child(1) { animation-delay: 0.04s; border-color: rgba(212, 162, 74, 0.45); }
+.dash-action:nth-child(2) { animation-delay: 0.14s; border-color: rgba(95, 191, 122, 0.4); }
+.dash-action:nth-child(3) { animation-delay: 0.24s; border-color: rgba(196, 74, 74, 0.38); }
+
+@keyframes dash-drop {
+  from { opacity: 0; transform: translateY(-32px) scale(0.97); }
+  to { opacity: 1; transform: none; }
 }
 
 .dash-action:hover {
@@ -1862,6 +1930,11 @@ td.num, th.num { text-align: right; }
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+  }
+
+  body::before,
+  .dash-flakes {
+    display: none;
   }
 }
 

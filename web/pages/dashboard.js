@@ -59,9 +59,16 @@ export async function dashboardPage() {
         ? pill('Practised today', 'green')
         : pill('Not yet practised today', 'yellow'),
     ),
-    actions,
-    strip,
+    h('div.dash-stage', null, festiveFlakes(), actions, strip),
   ];
+}
+
+function festiveFlakes() {
+  return h(
+    'div.dash-flakes',
+    { 'aria-hidden': 'true' },
+    Array.from({ length: 12 }, (_, i) => h('span.dash-flake', { style: { '--n': String(i) } })),
+  );
 }
 
 function actionCard({ kicker, title, body, onClick }) {
