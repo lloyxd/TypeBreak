@@ -50,7 +50,9 @@ web/
     backup.js              JSON export / validate / merge / replace
     service.js             wires the above together
     context.js             one service per page load
-  pages/                   dashboard, lessons, practice, progress, adaptive, settings
+    words.js               frozen bank for timed free practice
+    lesson-flow.js         redo-or-advance after the last exercise
+  pages/                   dashboard, lessons, practice, free-practice, progress, settings
   data/lessons.json        the predefined library (generated, read-only)
 ```
 
