@@ -376,6 +376,37 @@ export class AppService {
   }
 
   /**
+   * Start a timed free-practice run.
+   *
+   * Text is supplied by the Practice tab word bank, not the lesson library, and
+   * the attempt is never written to progress. Import and lesson history stay
+   * the only records that Progress can show.
+   */
+  startFreeSession({ text, mode = 'flow', clientId = 'default' } = {}) {
+    if (typeof text !== 'string' || text.length === 0) {
+      throw new Error('Free practice needs target text');
+    }
+
+    const session = new TypingSession({
+      text,
+      lessonId: null,
+      exerciseId: null,
+      mode,
+      now: () => this.now().getTime(),
+    });
+
+    this.sessions.set(clientId, { session, lesson: null, exercise: null, ephemeral: true });
+
+    return {
+      clientId,
+      ephemeral: true,
+      text,
+      mode,
+      segments: session.segments(),
+    };
+  }
+
+  /**
    * Submit one keystroke. Returns the updated highlight segments so a client
    * never has to re-implement the character-state logic.
    */
@@ -412,6 +443,29 @@ export class AppService {
 
     const record = entry.session.finish();
     this.sessions.delete(clientId);
+
+    if (entry.ephemeral) {
+      return {
+        ephemeral: true,
+        record: {
+          lessonId: null,
+          exerciseId: null,
+          mode: record.mode,
+          metrics: record.metrics,
+          errorsByChar: record.errorsByChar,
+          errorsByFinger: record.errorsByFinger,
+          errorsByMovement: record.errorsByMovement,
+          fullyCorrect: record.fullyCorrect,
+          startedAt: record.startedAt,
+          finishedAt: record.finishedAt,
+        },
+        lesson: null,
+        verdict: null,
+        attributedMistakes: [],
+        progress: null,
+        nextExercise: null,
+      };
+    }
 
     this.store.appendAttempt({
       ...record,
