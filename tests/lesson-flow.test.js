@@ -7,7 +7,17 @@ import {
   remainingSeconds,
   pickResumeLesson,
   REDO_WINDOW_MS,
+  PROMPT_DELAY_MS,
+  REDO_SECONDS,
 } from '../web/core/lesson-flow.js';
+
+describe('lesson complete timing', () => {
+  test('the overlay waits two seconds, then counts five', () => {
+    assert.equal(PROMPT_DELAY_MS, 2000);
+    assert.equal(REDO_SECONDS, 5);
+    assert.equal(REDO_WINDOW_MS, 5000);
+  });
+});
 
 describe('decideLessonComplete', () => {
   test('waits while the window is still open', () => {
@@ -47,8 +57,8 @@ describe('nextLessonId', () => {
 
 describe('remainingSeconds', () => {
   test('rounds up so the prompt never shows zero early', () => {
-    assert.equal(remainingSeconds(0), 10);
-    assert.equal(remainingSeconds(100), 10);
+    assert.equal(remainingSeconds(0), 5);
+    assert.equal(remainingSeconds(100), 5);
     assert.equal(remainingSeconds(REDO_WINDOW_MS - 1), 1);
     assert.equal(remainingSeconds(REDO_WINDOW_MS), 0);
   });

@@ -1,12 +1,12 @@
 /**
- * What happens after the last exercise of a lesson.
+ * What happens after an exercise finishes.
  *
- * The prompt lasts a fixed window: Space restarts the same lesson, and silence
- * advances to the next lesson in library order. Pure so the countdown can be
- * tested without a browser.
+ * The prompt is delayed so the summary can land, then a short countdown
+ * advances by default. Space restarts the same lesson.
  */
 
-export const REDO_SECONDS = 10;
+export const PROMPT_DELAY_MS = 2000;
+export const REDO_SECONDS = 5;
 export const REDO_WINDOW_MS = REDO_SECONDS * 1000;
 
 export function decideLessonComplete({ spacePressed = false, elapsedMs = 0, windowMs = REDO_WINDOW_MS } = {}) {
