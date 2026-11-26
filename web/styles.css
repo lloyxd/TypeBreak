@@ -1262,36 +1262,29 @@ button:focus-visible,
   display: flex;
   flex-direction: column;
   gap: 8px;
-  align-items: stretch;
-  width: 100%;
+  align-items: center;
   user-select: none;
 }
 
-.kb-row {
-  display: flex;
-  gap: 8px;
-  width: 100%;
-  justify-content: center;
-}
+.kb-row { display: flex; gap: 8px; }
 
 .key {
-  flex: 1 1 0;
-  min-width: 44px;
-  height: 46px;
-  border-radius: 11px;
+  min-width: 49px;
+  height: 49px;
+  border-radius: 12px;
   background: linear-gradient(175deg, rgba(42, 56, 104, 0.85), rgba(22, 30, 62, 0.9));
   border: 1px solid var(--edge);
   display: grid;
   place-items: center;
   font-family: var(--mono);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--text-faint);
   transition: background 0.1s, color 0.1s, transform 0.1s, box-shadow 0.1s;
   position: relative;
 }
 
-.key.space { flex: 6 1 0; min-width: 180px; }
+.key.space { min-width: 338px; }
 
 .key.finger-lpinky, .key.finger-rpinky { border-bottom: 2px solid #e06c9f; }
 .key.finger-lring, .key.finger-rring { border-bottom: 2px solid #d8a94c; }
