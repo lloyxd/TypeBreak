@@ -5,6 +5,7 @@ import {
   decideLessonComplete,
   nextLessonId,
   remainingSeconds,
+  pickResumeLesson,
   REDO_WINDOW_MS,
 } from '../web/core/lesson-flow.js';
 
@@ -50,5 +51,42 @@ describe('remainingSeconds', () => {
     assert.equal(remainingSeconds(100), 10);
     assert.equal(remainingSeconds(REDO_WINDOW_MS - 1), 1);
     assert.equal(remainingSeconds(REDO_WINDOW_MS), 0);
+  });
+});
+
+describe('pickResumeLesson', () => {
+  const lessons = [{ id: 'a', name: 'A' }, { id: 'b', name: 'B' }, { id: 'c', name: 'C' }];
+
+  test('starts the first lesson when nothing is recorded', () => {
+    const pick = pickResumeLesson(lessons, []);
+    assert.equal(pick.action, 'start');
+    assert.equal(pick.lesson.id, 'a');
+  });
+
+  test('continues the most recently practised unfinished lesson', () => {
+    const pick = pickResumeLesson(lessons, [
+      { lessonId: 'a', attempts: 2, passed: true, lastPractisedAt: '2026-01-01T00:00:00Z' },
+      { lessonId: 'b', attempts: 1, passed: false, lastPractisedAt: '2026-01-02T00:00:00Z' },
+    ]);
+    assert.equal(pick.action, 'continue');
+    assert.equal(pick.lesson.id, 'b');
+  });
+
+  test('starts the next unpassed lesson after the last one was cleared', () => {
+    const pick = pickResumeLesson(lessons, [
+      { lessonId: 'a', attempts: 1, passed: true, lastPractisedAt: '2026-01-03T00:00:00Z' },
+    ]);
+    assert.equal(pick.action, 'start');
+    assert.equal(pick.lesson.id, 'b');
+  });
+
+  test('continues the last lesson when the whole library is passed', () => {
+    const pick = pickResumeLesson(lessons, [
+      { lessonId: 'a', attempts: 1, passed: true, lastPractisedAt: '2026-01-01T00:00:00Z' },
+      { lessonId: 'b', attempts: 1, passed: true, lastPractisedAt: '2026-01-02T00:00:00Z' },
+      { lessonId: 'c', attempts: 1, passed: true, lastPractisedAt: '2026-01-03T00:00:00Z' },
+    ]);
+    assert.equal(pick.action, 'continue');
+    assert.equal(pick.lesson.id, 'c');
   });
 });
