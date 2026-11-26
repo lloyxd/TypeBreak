@@ -16,7 +16,7 @@ import { pageHead, errorBox, toast } from './shared.js';
 import { ComboTracker } from '../ui/effects.js';
 import { getEffects } from '../app.js';
 import { freePracticePage } from './free-practice.js';
-import { decideLessonComplete, nextLessonId, remainingSeconds } from '../core/lesson-flow.js';
+import { decideLessonComplete, nextLessonId, remainingSeconds, PROMPT_DELAY_MS } from '../core/lesson-flow.js';
 
 const KEYBOARD_ROWS = [
   ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
@@ -316,6 +316,8 @@ function buildPracticeView(payload, ctx) {
 
   function clearPrompt() {
     if (state.prompt?.timer) clearInterval(state.prompt.timer);
+    if (state.prompt?.delay) clearTimeout(state.prompt.delay);
+    state.prompt?.overlay?.remove();
     state.prompt = null;
     clear(overlayHost);
   }
@@ -325,36 +327,49 @@ function buildPracticeView(payload, ctx) {
     navigate(`/practice?lesson=${encodeURIComponent(ctx.lessonId)}&mode=${ctx.mode}&ex=0`);
   }
 
-  function goNextLesson() {
+  function goNext() {
+    const nextExerciseId = state.nextExerciseId;
     clearPrompt();
+    if (nextExerciseId) {
+      const exercises = payload.lessonDetail?.exercises ?? [];
+      const index = exercises.findIndex((exercise) => exercise.id === nextExerciseId);
+      navigate(`/practice?lesson=${encodeURIComponent(ctx.lessonId)}&mode=${ctx.mode}&ex=${Math.max(0, index)}`);
+      return;
+    }
     const next = nextLessonId(api.lessons(), ctx.lessonId);
     if (next) navigate(`/practice?lesson=${encodeURIComponent(next)}&mode=${ctx.mode}&ex=0`);
     else navigate('/lessons');
   }
 
-  function startLessonCompletePrompt() {
+  function revealLessonCompletePrompt() {
     const startedAt = Date.now();
     const countEl = h('div.lesson-complete-count', null, String(remainingSeconds(0)));
-    overlayHost.appendChild(
+    const overlay = h(
+      'div.lesson-complete-overlay',
+      { role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Redo this lesson' },
       h(
-        'div.lesson-complete-overlay',
-        { role: 'dialog', 'aria-label': 'Redo this lesson' },
-        h(
-          'div.lesson-complete-card',
-          null,
-          h('h2', null, 'Lesson complete'),
-          h('p', null, 'Press space to redo this lesson.'),
-          countEl,
-          h('p.faint', { style: { margin: '0' } }, 'Next lesson if you wait'),
-        ),
+        'div.lesson-complete-card',
+        null,
+        h('h2', null, 'Next in'),
+        countEl,
+        h('p', null, 'Press space to redo this lesson.'),
+        h('p.faint', { style: { margin: '8px 0 0' } }, 'Waiting continues automatically'),
       ),
     );
+    document.body.appendChild(overlay);
     const timer = setInterval(() => {
       const elapsed = Date.now() - startedAt;
       countEl.textContent = String(remainingSeconds(elapsed));
-      if (decideLessonComplete({ elapsedMs: elapsed }) === 'next') goNextLesson();
-    }, 200);
-    state.prompt = { startedAt, timer };
+      if (decideLessonComplete({ elapsedMs: elapsed }) === 'next') goNext();
+    }, 100);
+    state.prompt = { ...(state.prompt ?? {}), startedAt, timer, overlay, visible: true, delay: null };
+  }
+
+  function scheduleLessonCompletePrompt(result) {
+    clearPrompt();
+    state.nextExerciseId = result.nextExercise ?? null;
+    const delay = setTimeout(revealLessonCompletePrompt, PROMPT_DELAY_MS);
+    state.prompt = { delay, timer: null, overlay: null, visible: false };
   }
 
   /* ---------- behaviour ---------- */
@@ -479,6 +494,7 @@ function buildPracticeView(payload, ctx) {
    */
   function handleKey(key) {
     if (state.prompt) {
+      if (!state.prompt.visible) return;
       const elapsed = Date.now() - state.prompt.startedAt;
       const action = decideLessonComplete({ spacePressed: key === ' ', elapsedMs: elapsed });
       if (action === 'restart') redoLesson();
@@ -570,7 +586,7 @@ function buildPracticeView(payload, ctx) {
       summary.classList.add('summary-enter');
       mount(summaryHost, summary);
 
-      if (!result.nextExercise) startLessonCompletePrompt();
+      scheduleLessonCompletePrompt(result);
 
       // Let the sidebar and any listener know progress moved.
       window.dispatchEvent(new CustomEvent('typebreak:progress-changed'));
