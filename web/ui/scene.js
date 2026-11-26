@@ -15,17 +15,17 @@
  */
 
 const PALETTE = {
-  skyTop: '#070a20',
-  skyMid: '#0e1440',
-  skyLow: '#1b2358',
-  glowMoon: 'rgba(168, 196, 255, 0.16)',
-  ridgeFar: '#232c5e',
-  ridgeMid: '#2e3a72',
-  ridgeNear: '#3a4788',
-  ridgeFront: '#232a55',
-  snow: '#cfe0ff',
+  skyTop: '#07140f',
+  skyMid: '#0f241c',
+  skyLow: '#16382a',
+  glowMoon: 'rgba(243, 201, 107, 0.14)',
+  ridgeFar: '#1a3a32',
+  ridgeMid: '#214a3c',
+  ridgeNear: '#2a5a48',
+  ridgeFront: '#163028',
+  snow: '#f4f1e8',
   snowWarm: '#ffe9b8',
-  window: '#ffcf5c',
+  window: '#f3c96b',
 };
 
 /** Deterministic PRNG so the mountains are the same on every load. */
@@ -123,7 +123,7 @@ export function createScene(container, { reducedMotion = false } = {}) {
       buildRidge({ random, width: width * 1.1, height, baseY: height * 0.9, peakHeight: height * 0.5, points: 10, shade: PALETTE.ridgeMid, jitter: 1.1 }),
       buildRidge({ random, width, height, baseY: height * 1.02, peakHeight: height * 0.36, points: 8, shade: PALETTE.ridgeNear, jitter: 1 }),
     ];
-    snow = createSnow(Math.round(Math.min(90, (width * height) / 16000)));
+    snow = createSnow(Math.round(Math.min(70, (width * height) / 18000)));
   };
 
   const resize = () => {
@@ -153,23 +153,24 @@ export function createScene(container, { reducedMotion = false } = {}) {
     const my = height * 0.18;
     const halo = ctx.createRadialGradient(mx, my, 0, mx, my, height * 0.5);
     halo.addColorStop(0, PALETTE.glowMoon);
-    halo.addColorStop(0.4, 'rgba(140, 170, 240, 0.05)');
+    halo.addColorStop(0.4, 'rgba(180, 80, 50, 0.05)');
     halo.addColorStop(1, 'rgba(0, 0, 0, 0)');
     ctx.fillStyle = halo;
     ctx.fillRect(0, 0, width, height);
 
     ctx.beginPath();
     ctx.arc(mx, my, Math.min(width, height) * 0.045, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(226, 236, 255, 0.92)';
+    ctx.fillStyle = 'rgba(255, 236, 200, 0.92)';
     ctx.fill();
 
-    // Faint stars, a fixed scatter so they do not twinkle distractingly.
-    ctx.fillStyle = 'rgba(200, 218, 255, 0.5)';
-    for (let i = 0; i < 40; i += 1) {
+    // A few stars, slow pulse — cheap enough for a static host.
+    ctx.fillStyle = 'rgba(255, 236, 210, 0.7)';
+    for (let i = 0; i < 28; i += 1) {
       const sx = ((i * 137.5) % 100) / 100;
       const sy = ((i * 61.8) % 55) / 100;
       const r = i % 7 === 0 ? 1.4 : 0.8;
-      ctx.globalAlpha = 0.25 + ((i * 37) % 50) / 100;
+      const twinkle = reducedMotion ? 0.4 : 0.28 + 0.22 * Math.sin(elapsed * 0.0012 + i);
+      ctx.globalAlpha = twinkle;
       ctx.beginPath();
       ctx.arc(sx * width, sy * height * 0.72, r, 0, Math.PI * 2);
       ctx.fill();
