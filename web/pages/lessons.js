@@ -70,7 +70,16 @@ export async function lessonsPage({ query }) {
                   )
                 : null,
             ),
-            passed ? pill('Passed', 'green') : h('span.pill', null, `L${lesson.level}`),
+            h(
+              'button.primary',
+              {
+                onClick: (event) => {
+                  event.stopPropagation();
+                  navigate(`/practice?lesson=${encodeURIComponent(lesson.id)}`);
+                },
+              },
+              progress?.attempts ? 'Continue' : 'Start',
+            ),
           );
         }),
       ),
@@ -239,7 +248,7 @@ export async function lessonPage({ params }) {
 
   const startAll = h('button.primary', {
     onClick: () => navigate(`/practice?lesson=${encodeURIComponent(lesson.id)}&ex=0`),
-  }, 'Start lesson');
+  }, progress?.attempts ? 'Continue' : 'Start');
 
   return [
     header,
