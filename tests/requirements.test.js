@@ -445,7 +445,10 @@ describe('R8 — one local core, no backend', () => {
       'web/pages/practice.js',
       'web/pages/progress.js',
       'web/pages/adaptive.js',
+      'web/pages/free-practice.js',
       'web/pages/lessons.js',
+      'web/core/words.js',
+      'web/core/lesson-flow.js',
     ];
 
     for (const file of files) {
@@ -496,7 +499,7 @@ describe('R8 — one local core, no backend', () => {
   });
 
   test('pages read data through the client adapter, not from each other', async () => {
-    for (const page of ['dashboard', 'lessons', 'practice', 'progress', 'adaptive', 'settings']) {
+    for (const page of ['dashboard', 'lessons', 'practice', 'free-practice', 'progress', 'adaptive', 'settings']) {
       const source = await read(`web/pages/${page}.js`);
       assert.match(
         source,
