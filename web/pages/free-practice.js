@@ -12,6 +12,7 @@ import { client as api } from '../client.js';
 import { navigate } from '../router.js';
 import { toast } from './shared.js';
 import { generatePracticeText, parsePracticeSeconds, PRACTICE_DURATIONS } from '../core/words.js';
+import { createOnscreenKeyboard } from '../ui/onscreen-keyboard.js';
 
 export async function freePracticePage({ query }) {
   const seconds = parsePracticeSeconds(query.get('time'));
@@ -42,6 +43,7 @@ function buildFreePracticeView(payload, { seconds }) {
   const surface = h('div.typing-surface.arena-surface', { onClick: () => input.focus() }, textEl);
   const liveWpm = h('div.arena-live', null, '');
   const resultHost = h('div.arena-result');
+  const keyboard = createOnscreenKeyboard();
 
   const input = h('input.hidden-input', {
     type: 'text',
@@ -94,6 +96,8 @@ function buildFreePracticeView(payload, { seconds }) {
         String(value),
       ),
     ),
+    h('span.arena-mode-split', { 'aria-hidden': 'true' }),
+    keyboard.toggle,
   );
 
   function formatRemaining(ms) {
@@ -125,6 +129,7 @@ function buildFreePracticeView(payload, { seconds }) {
       state.stats = result.stats;
       state.position = result.progress?.position ?? before;
       paintCharacters([before, state.position]);
+      keyboard.paint(state.segments, key);
       if (result.finished) await finishRun();
     } catch (error) {
       toast(error.message);
@@ -203,6 +208,7 @@ function buildFreePracticeView(payload, { seconds }) {
   });
 
   paintText();
+  keyboard.paint(state.segments);
   state.timer = setInterval(tickTimer, 200);
   queueMicrotask(() => input.focus());
 
@@ -213,6 +219,7 @@ function buildFreePracticeView(payload, { seconds }) {
     liveWpm,
     surface,
     input,
+    keyboard.wrap,
     resultHost,
     h('p.arena-footer', null, 'tab · restart'),
   );

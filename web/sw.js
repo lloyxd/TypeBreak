@@ -15,7 +15,7 @@
  * there is nothing to sync and no data to lose.
  */
 
-const VERSION = 'typebreak-v7';
+const VERSION = 'typebreak-v8';
 const SHELL_CACHE = `${VERSION}-shell`;
 const DATA_CACHE = `${VERSION}-data`;
 
@@ -51,6 +51,7 @@ const SHELL_ASSETS = [
   './ui/storage.js',
   './ui/scene.js',
   './ui/effects.js',
+  './ui/onscreen-keyboard.js',
   './ui/mountain.js',
   './data/lessons.json',
   './manifest.webmanifest',

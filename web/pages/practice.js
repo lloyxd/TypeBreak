@@ -17,14 +17,7 @@ import { ComboTracker } from '../ui/effects.js';
 import { getEffects } from '../app.js';
 import { freePracticePage } from './free-practice.js';
 import { decideLessonComplete, nextLessonId, remainingSeconds, PROMPT_DELAY_MS } from '../core/lesson-flow.js';
-
-const KEYBOARD_ROWS = [
-  ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
-  ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']'],
-  ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'"],
-  ['z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/'],
-  [' '],
-];
+import { createOnscreenKeyboard } from '../ui/onscreen-keyboard.js';
 
 /** Map a character to the finger id, mirroring core/keyboard.js. */
 const FINGER_MAP = (() => {
@@ -250,38 +243,11 @@ function buildPracticeView(payload, ctx) {
 
   /* ---------- keyboard ---------- */
 
-  const keyEls = new Map();
-  const keyboard = h(
-    'div.keyboard',
-    { 'aria-hidden': 'true' },
-    KEYBOARD_ROWS.map((row) =>
-      h(
-        'div.kb-row',
-        null,
-        row.map((ch) => {
-          const finger = FINGER_MAP[ch];
-          const el = h(`div.key${ch === ' ' ? '.space' : ''}${finger ? `.finger-${finger.toLowerCase()}` : ''}`, null, ch === ' ' ? 'space' : ch);
-          keyEls.set(ch, el);
-          return el;
-        }),
-      ),
-    ),
-  );
+  const onscreen = createOnscreenKeyboard();
+  const keyboard = onscreen.wrap;
 
   function paintKeyboard(pressed = null) {
-    for (const el of keyEls.values()) el.classList.remove('active', 'pressed');
-    const target = state.segments.find((s) => s.state === 'current');
-    if (target) {
-      const active = keyEls.get(target.text[0].toLowerCase());
-      if (active) active.classList.add('active');
-    }
-    if (pressed) {
-      const el = keyEls.get(pressed.toLowerCase());
-      if (el) {
-        el.classList.add('pressed');
-        setTimeout(() => el.classList.remove('pressed'), 90);
-      }
-    }
+    onscreen.paint(state.segments, pressed);
   }
 
   /* ---------- controls ---------- */
@@ -307,7 +273,7 @@ function buildPracticeView(payload, ctx) {
   );
   const backBtn = h('button.ghost', { onClick: () => navigate(`/lesson/${encodeURIComponent(ctx.lessonId)}`) }, 'Back to lesson');
 
-  const controls = h('div.btn-row', null, restartBtn, skipBtn, backBtn);
+  const controls = h('div.btn-row', null, onscreen.toggle, restartBtn, skipBtn, backBtn);
 
   /* ---------- summary panel ---------- */
 
