@@ -8,6 +8,8 @@ The idea is a personal typing coach: instead of a fixed curriculum, TypeBreak
 measures how each finger performs and builds each day's practice from a
 predefined lesson library, weighted toward whatever is costing you accuracy.
 
+**Live app:** [https://icy-stone-0add34200.3.azurestaticapps.net](https://icy-stone-0add34200.3.azurestaticapps.net)
+
 ---
 
 ## Quick start
@@ -232,6 +234,10 @@ session, plan generation and task tracking all continue to work.
 
 Target: **Azure Static Web Apps, Free tier**. No backend, no database, no paid
 service.
+
+The deployed site is [https://icy-stone-0add34200.3.azurestaticapps.net](https://icy-stone-0add34200.3.azurestaticapps.net).
+That hostname belongs to this Static Web App; if the app is deleted and created
+again, Azure assigns a new one.
 
 1. Push the repository.
 2. Create a Static Web App in Azure, choosing **Other** as the source (or connect
