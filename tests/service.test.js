@@ -355,3 +355,20 @@ describe('the adaptive payload', () => {
     }
   });
 });
+
+describe('free practice sessions', () => {
+  test('finish does not write an attempt', () => {
+    const service = newService();
+    const started = service.startFreeSession({ text: 'hi there' });
+    assert.equal(started.ephemeral, true);
+    for (const ch of 'hi there') service.press({ key: ch });
+    const result = service.finishSession();
+    assert.equal(result.ephemeral, true);
+    assert.equal(service.getState().attempts.length, 0);
+  });
+
+  test('empty text is refused', () => {
+    const service = newService();
+    assert.throws(() => service.startFreeSession({ text: '' }));
+  });
+});
