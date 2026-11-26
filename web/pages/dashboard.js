@@ -19,13 +19,13 @@ export async function dashboardPage() {
     'div.dash-actions',
     null,
     actionCard({
-      kicker: 'Type',
+      kicker: 'Warm-up',
       title: 'Practice',
       body: 'A timed drill. Pick a duration and start typing.',
       onClick: () => navigate('/practice'),
     }),
     actionCard({
-      kicker: 'Curriculum',
+      kicker: 'Lessons',
       title: 'Learn',
       body: hasHistory ? 'Continue from the lessons you have already started.' : 'Start the lesson library from the beginning.',
       onClick: () => navigate('/lessons'),

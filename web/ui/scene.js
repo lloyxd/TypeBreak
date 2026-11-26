@@ -148,6 +148,16 @@ export function createScene(container, { reducedMotion = false } = {}) {
     ctx.fillStyle = sky;
     ctx.fillRect(0, 0, width, height);
 
+    // Cheap aurora: two wide bands that drift with elapsed time.
+    const ax = Math.sin(elapsed * 0.00018) * width * 0.08;
+    const aurora = ctx.createLinearGradient(0, height * 0.08, width, height * 0.42);
+    aurora.addColorStop(0, 'rgba(40, 140, 80, 0)');
+    aurora.addColorStop(0.35 + ax / width, 'rgba(46, 150, 90, 0.16)');
+    aurora.addColorStop(0.55, 'rgba(180, 50, 50, 0.08)');
+    aurora.addColorStop(1, 'rgba(40, 140, 80, 0)');
+    ctx.fillStyle = aurora;
+    ctx.fillRect(0, 0, width, height * 0.5);
+
     // Moon with a soft bloom, high and to the right.
     const mx = width * 0.74;
     const my = height * 0.18;
@@ -248,7 +258,7 @@ export function createScene(container, { reducedMotion = false } = {}) {
     // mountains into the page background.
     const vignette = ctx.createRadialGradient(width * 0.5, height * 0.45, height * 0.35, width * 0.5, height * 0.5, height * 1.02);
     vignette.addColorStop(0, 'rgba(0,0,0,0)');
-    vignette.addColorStop(1, 'rgba(4, 6, 20, 0.5)');
+    vignette.addColorStop(1, 'rgba(4, 12, 8, 0.5)');
     ctx.fillStyle = vignette;
     ctx.fillRect(0, 0, width, height);
 
