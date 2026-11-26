@@ -15,6 +15,7 @@ import { navigate } from '../router.js';
 import { pageHead, errorBox, toast } from './shared.js';
 import { ComboTracker } from '../ui/effects.js';
 import { getEffects } from '../app.js';
+import { freePracticePage } from './free-practice.js';
 
 const KEYBOARD_ROWS = [
   ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
@@ -59,7 +60,7 @@ export async function practicePage({ query }) {
   const exerciseIndex = query.get('ex') ? Number.parseInt(query.get('ex'), 10) : null;
 
   if (!lessonId) {
-    return [pageHead('Practice', 'Choose a lesson first.'), errorBox('No lesson selected. Open the Lessons page to pick one.')];
+    return freePracticePage({ query });
   }
 
   const detail = api.lesson(lessonId);
