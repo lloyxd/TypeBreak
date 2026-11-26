@@ -67,7 +67,6 @@ export async function dashboardPage() {
       { style: { padding: '16px 16px 12px', borderBottom: '1px solid var(--border)' } },
       h('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' } },
         h('h2', { style: { margin: 0 } }, "Today's plan"),
-        h('button.ghost', { onClick: () => navigate('/adaptive') }, 'Why these?'),
       ),
       h('p.prose', { style: { margin: '6px 0 0', fontSize: '12.5px' } }, data.plan.explanation),
     ),
@@ -136,7 +135,6 @@ export async function dashboardPage() {
   const weaknessCard = card(
     h('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' } },
       h('h2', { style: { marginBottom: '12px' } }, 'Weaknesses'),
-      h('button.ghost', { onClick: () => navigate('/adaptive') }, 'Details'),
     ),
     weaknessPanel,
   );
