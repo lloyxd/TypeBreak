@@ -1556,6 +1556,8 @@ td.num, th.num { text-align: right; }
   line-height: 1.7;
   max-height: 8.6em;
   overflow: hidden;
+  word-break: normal;
+  overflow-wrap: normal;
 }
 
 .arena-score {

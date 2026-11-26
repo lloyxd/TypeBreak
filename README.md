@@ -17,7 +17,7 @@ dependencies, has no build step, and does not need Node to run.
 
 ```bash
 npm start            # static dev server at http://localhost:4173
-npm test             # 225 tests
+npm test             # 249 tests
 ```
 
 Deploying is a copy of `web/` to any static host (see [Deployment](#deployment)).
