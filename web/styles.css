@@ -1258,7 +1258,7 @@ button:focus-visible,
 
 /* ---------- on-screen keyboard ---------- */
 .keyboard {
-  margin-top: 24px;
+  margin: 8px 0 12px;
   display: flex;
   flex-direction: column;
   gap: 6px;
