@@ -95,6 +95,10 @@ export const client = {
     return service().startSession({ lessonId, exerciseId, mode });
   },
 
+  startFreeSession({ text, mode }) {
+    return service().startFreeSession({ text, mode });
+  },
+
   press(key) {
     return service().press({ key });
   },
