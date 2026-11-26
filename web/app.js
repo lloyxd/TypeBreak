@@ -43,7 +43,8 @@ function paintNav(pathname) {
   if (!nav) return;
   for (const link of nav.querySelectorAll('a')) {
     const target = link.getAttribute('href')?.replace(/^#/, '') ?? '';
-    const active = target === '/' ? pathname === '/' : pathname === target || pathname.startsWith(`${target}/`);
+    const pathOnly = (pathname.split('?')[0] || '/');
+    const active = target === '/' ? pathOnly === '/' : pathOnly === target || pathOnly.startsWith(`${target}/`);
     if (active) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
   }
