@@ -6,7 +6,6 @@ import { h, section, card, pill, empty, relativeTime, clear } from '../dom.js';
 import { client as api } from '../client.js';
 import { navigate } from '../router.js';
 import { pageHead, errorBox } from './shared.js';
-import { mountainPath } from '../ui/mountain.js';
 
 /** Facets are derived from a static library, so one lookup per session is enough. */
 let cachedFacets = null;
@@ -157,14 +156,8 @@ export async function lessonsPage({ query }) {
   const countLabel = h('p.faint', { style: { fontSize: '12px', margin: '0 0 12px' } },
     `${lessons.length} lesson${lessons.length === 1 ? '' : 's'}${activeFilters.length ? ' matching filters' : ` · ${overview.counts?.exercises ?? ''} exercises total`}`);
 
-  // The climb map belongs here as well: browsing the library and seeing where you
-  // are on the mountain are the same question.
-  const climb = mountainPath({ lessons: api.lessons(), progressOf, height: 340 });
-
   return [
-    pageHead('Lessons', 'Every lesson is available at any time — the climb shows where you are, not a gate.'),
-    climb,
-    h('div', { style: { height: '26px' } }),
+    pageHead('Learn', 'Every lesson is available at any time. Start one, or continue where you left off.'),
     h('h2', null, 'Browse the library'),
     filterBar,
     countLabel,
