@@ -6,6 +6,7 @@ import { h, section, card, pill, empty, relativeTime, clear } from '../dom.js';
 import { client as api } from '../client.js';
 import { navigate } from '../router.js';
 import { pageHead, errorBox } from './shared.js';
+import { pickResumeLesson } from '../core/lesson-flow.js';
 
 /** Facets are derived from a static library, so one lookup per session is enough. */
 let cachedFacets = null;
@@ -165,9 +166,24 @@ export async function lessonsPage({ query }) {
   const countLabel = h('p.faint', { style: { fontSize: '12px', margin: '0 0 12px' } },
     `${lessons.length} lesson${lessons.length === 1 ? '' : 's'}${activeFilters.length ? ' matching filters' : ` · ${overview.counts?.exercises ?? ''} exercises total`}`);
 
+  const resume = pickResumeLesson(api.lessons(), api.lessonProgress());
+  const resumeButton = resume
+    ? h(
+        'button.learn-resume',
+        {
+          type: 'button',
+          onClick: () => navigate(`/practice?lesson=${encodeURIComponent(resume.lesson.id)}`),
+        },
+        h('span.learn-resume-kicker', null, resume.action === 'continue' ? 'Pick up where you left off' : 'Begin the library'),
+        h('span.learn-resume-label', null, resume.action === 'continue' ? 'Continue' : 'Start'),
+        h('span.learn-resume-sub', null, resume.lesson.name),
+      )
+    : null;
+
   return [
     pageHead('Learn', 'Every lesson is available at any time. Start one, or continue where you left off.'),
-    h('h2', null, 'Browse the library'),
+    resumeButton,
+    h('h2', { style: { marginTop: '28px' } }, 'Browse the library'),
     filterBar,
     countLabel,
     listHost,

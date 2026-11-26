@@ -1593,6 +1593,48 @@ td.num, th.num { text-align: right; }
 
 .arena-footer { margin-top: 36px; }
 
+.learn-resume {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+  min-height: 148px;
+  margin: 8px 0 4px;
+  padding: 28px 32px;
+  border-radius: 22px;
+  border: 1px solid var(--edge-strong);
+  background: linear-gradient(165deg, rgba(255, 212, 92, 0.16), rgba(18, 24, 52, 0.92) 55%);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.learn-resume:hover {
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.learn-resume-kicker {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.learn-resume-label {
+  font-size: 48px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.learn-resume-sub {
+  font-size: 15px;
+  color: var(--text-faint);
+}
+
 /* ---------- dashboard actions ---------- */
 
 .dash-actions {
@@ -1720,6 +1762,8 @@ td.num, th.num { text-align: right; }
   .stat:nth-child(odd) { border-left: none; }
   h1 { font-size: 22px; }
   .fx-banner { font-size: 22px; }
+  .learn-resume-label { font-size: 36px; }
+  .learn-resume { min-height: 120px; padding: 22px 20px; }
 }
 
 /* ---------- motion preferences ---------- */
