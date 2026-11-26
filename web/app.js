@@ -147,7 +147,7 @@ document.addEventListener('keydown', (event) => {
   if (event.ctrlKey || event.metaKey || event.altKey) return;
   const now = Date.now();
   if (lastKey === 'g' && now - lastKeyAt < 700) {
-    const map = { d: '/', l: '/lessons', p: '/progress', a: '/adaptive', s: '/settings' };
+    const map = { d: '/', l: '/lessons', t: '/practice', p: '/progress', s: '/settings' };
     if (map[event.key]) {
       window.location.hash = map[event.key];
       lastKey = null;
