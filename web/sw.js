@@ -15,7 +15,7 @@
  * there is nothing to sync and no data to lose.
  */
 
-const VERSION = 'typebreak-v5';
+const VERSION = 'typebreak-v6';
 const SHELL_CACHE = `${VERSION}-shell`;
 const DATA_CACHE = `${VERSION}-data`;
 
@@ -38,7 +38,10 @@ const SHELL_ASSETS = [
   './core/library.js',
   './core/profiles.js',
   './core/service.js',
+  './core/words.js',
+  './core/lesson-flow.js',
   './pages/adaptive.js',
+  './pages/free-practice.js',
   './pages/dashboard.js',
   './pages/lessons.js',
   './pages/practice.js',
