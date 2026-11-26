@@ -15,7 +15,7 @@
  * there is nothing to sync and no data to lose.
  */
 
-const VERSION = 'typebreak-v6';
+const VERSION = 'typebreak-v7';
 const SHELL_CACHE = `${VERSION}-shell`;
 const DATA_CACHE = `${VERSION}-data`;
 
